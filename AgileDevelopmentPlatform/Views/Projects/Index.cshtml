@@ -1,0 +1,35 @@
+﻿@using AgileDevelopmentPlatform.Models
+@model AgileDevelopmentPlatform.Models.Projects
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>ProjectList</h2>
+
+@if (Model.List.Count > 0)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+              <th>
+                Project
+             </th>
+        </thead>
+        <tbody>
+            @foreach (ProjectModel project in Model.List)
+              {
+              <tr>
+                 <td>@Html.ActionLink(project.Name, "Edit", "Projects", new { id = project.Id },null)</td>
+              </tr>
+
+              }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <p>No projects have  been created yet.</p>
+}
+
