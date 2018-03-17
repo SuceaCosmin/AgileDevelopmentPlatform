@@ -166,10 +166,11 @@
     <Compile Include="Controllers\Api\ProjectsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Dtos\ProjectDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AutomapperProfile.cs" />
+    <Compile Include="App_Start\AutomapperProfile.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\Projects.cs" />
     <Compile Include="PlatformModel.Context.cs">
@@ -216,6 +217,8 @@
       <DependentUpon>PlatformModel.edmx</DependentUpon>
       <LastGenOutput>PlatformModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">

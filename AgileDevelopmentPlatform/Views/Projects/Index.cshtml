@@ -10,19 +10,20 @@
 
 @if (Model.List.Count > 0)
 {
-    <table class="table table-bordered table-hover">
+    <table id="projects" class="table table-bordered table-hover">
         <thead>
-              <th>
-                Project
-             </th>
+        <tr>
+            <th>Project</th>
+            <th>Delete</th>
+        </tr>
         </thead>
         <tbody>
             @foreach (ProjectModel project in Model.List)
               {
               <tr>
                  <td>@Html.ActionLink(project.Name, "Edit", "Projects", new { id = project.Id },null)</td>
+                 <td> <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button></td>
               </tr>
-
               }
         </tbody>
 
@@ -33,3 +34,30 @@ else
     <p>No projects have  been created yet.</p>
 }
 
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            $("#projects .js-delete").on("click",
+                function() {
+
+                    var button = $(this);
+                    bootbox.confirm("Are you sure you want to delete the selected project?",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/projects/" + button.attr("data-project-id"),
+                                    method: "DELETE",
+                                    success: function() {
+                                        button.parents("tr").remove();
+                                    }
+
+                                });
+                            }
+                        });
+                  
+
+                });
+        });
+    </script>
+}
