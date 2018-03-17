@@ -9,7 +9,10 @@ namespace AgileDevelopmentPlatform.Models
     public class ProjectModel
     {
 
-        public ProjectModel(){    }
+        public ProjectModel()
+        {
+            Id = 0;
+        }
 
         public ProjectModel(string name)
         {

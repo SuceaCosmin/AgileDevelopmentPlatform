@@ -36,7 +36,8 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult New()
         {
-            return View("ProjectForm");
+            ProjectModel model=new ProjectModel();
+            return View("ProjectForm", model);
         }
 
         [HttpPost]

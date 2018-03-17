@@ -18,7 +18,6 @@ namespace AgileDevelopmentPlatform.Controllers.Api
         public ProjectsController()
         {
             db=new AgileDevelopmentDatabaseEntities();
-            ;
         }
 
         // GET /api/projects

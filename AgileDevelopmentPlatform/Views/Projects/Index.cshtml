@@ -7,7 +7,7 @@
 
 
 <h2>ProjectList</h2>
-
+<button class="button btn-link">@Html.ActionLink("Create new project","New","Projects")</button>
 @if (Model.List.Count > 0)
 {
     <table id="projects" class="table table-bordered table-hover">
@@ -38,7 +38,10 @@ else
 {
     <script>
         $(document).ready(function() {
-            $("#projects .js-delete").on("click",
+           var table= $("#projects").DataTable();
+
+            $("#projects").on("click",
+                ".js-delete",
                 function() {
 
                     var button = $(this);
@@ -48,14 +51,14 @@ else
                                 $.ajax({
                                     url: "/api/projects/" + button.attr("data-project-id"),
                                     method: "DELETE",
-                                    success: function() {
-                                        button.parents("tr").remove();
+                                    success: function () {
+                                        table.row(button.parents("tr").remove()).draw();
                                     }
 
                                 });
                             }
                         });
-                  
+
 
                 });
         });
