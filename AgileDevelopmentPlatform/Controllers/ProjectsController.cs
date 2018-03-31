@@ -12,71 +12,133 @@ namespace AgileDevelopmentPlatform.Controllers
     public class ProjectsController : Controller
     {
 
-        private AgileDevelopmentDatabaseEntities entities;
-        private Projects ProjectList;
+        private DataManager dataManager;
+ 
 
         public ProjectsController()
         {
-            entities = new AgileDevelopmentDatabaseEntities();
-            ProjectList=new Projects();
-            foreach (Project project in entities.Projects.ToList())
-            {
-                ProjectList.Add(Mapper.Map<ProjectModel>(project));
-            }
-
-
+            dataManager=new DataManager();
+         
         }
 
         // GET: Projects
         public ActionResult Index()
         {
              
-            return View(ProjectList);
+            return View(dataManager.ProjectList);
         }
 
         public ActionResult New()
         {
-            ProjectModel model=new ProjectModel();
-            return View("ProjectForm", model);
+            ProjectCreateOrEditViewModel viewModel =new ProjectCreateOrEditViewModel();
+            return View("AddProject", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(ProjectModel project)
+        public ActionResult Save(ProjectCreateOrEditViewModel project)
         {
             if (!ModelState.IsValid)
             {
-                return View("ProjectForm",project);
+                return View("AddProject", project);
             }
 
-            if (project.Id == 0)
+            ProjectModel projectModel=new ProjectModel()
             {
-                Project newProject = Mapper.Map<Project>(project);
-                entities.Projects.Add(newProject);
-                entities.SaveChanges();
-            }
-            else
+                Id = project.Id,
+                Name =project.Name
+            };
+
+            if (projectModel.Id == 0)
             {
-                var projectInDb=entities.Projects.Single(proj => proj.ID == project.Id);
-                Mapper.Map(project, projectInDb);
-                entities.SaveChanges();
+                dataManager.AddProject(projectModel);
+                dataManager.SaveChanges();
+
+
+            }else{
+                dataManager.UpdateProject(projectModel);
+                dataManager.SaveChanges();
             }
    
 
             return RedirectToAction("Index", "Projects");
         }
 
-
         public ActionResult Edit(int id)
         {
-            var project = ProjectList.List.Find(proj => proj.Id == id);
+             ;
+            var project = dataManager.FindProjectById(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            ProjectCreateOrEditViewModel viewViewModel = new ProjectCreateOrEditViewModel()
+            {
+                Id = project.Id,
+                Name= project.Name
+            };
+
+            return View("AddProject", viewViewModel);
+           
+        }
+
+        public ActionResult View(int id)
+        {
+            var project = dataManager.FindProjectById(id);
+
+             
             if (project == null)
             {
                 return HttpNotFound();
             }
 
-            return View("ProjectForm",project);
-           
+            ProjectViewModel viewModel = new ProjectViewModel()
+            {
+                Name = project.Name,
+                Id = project.Id,
+                TaskList = project.TaskList
+            };
+
+
+            return View("ViewProject", viewModel);
+          
+        }
+
+        public ActionResult NewTask(int projectID)
+        {
+
+
+            ViewBag.PriorityList = TaskPriorities.PriorityList;
+            NewTaskViewModel viewModel= new NewTaskViewModel()
+            {
+                ProjectID =projectID
+                
+            };
+            return PartialView("NewTask", viewModel);
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveTask(NewTaskViewModel taskView)
+        {
+            //TODO  see how to make the client side validation work.
+            if (!ModelState.IsValid)
+            {
+                return View("NewTask", taskView);
+            }
+
+            TaskModel model=new TaskModel()
+            {
+                Id=0,
+                Name = taskView.Name,
+                Description = taskView.Description,
+                ProjectId = taskView.ProjectID,
+                Status = "Open"
+            };
+
+            dataManager.AddTask(model);
+            dataManager.SaveChanges();
+
+            return RedirectToAction("View", "Projects",new{Id=taskView.ProjectID});
         }
     }
 }

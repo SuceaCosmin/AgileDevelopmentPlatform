@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AgileDevelopmentPlatform
+namespace AgileDevelopmentPlatform.Tests
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace AgileDevelopmentPlatform
             this.UserAccesses = new HashSet<UserAccess>();
         }
     
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

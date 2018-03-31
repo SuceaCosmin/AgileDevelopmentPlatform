@@ -21,7 +21,7 @@ namespace AgileDevelopmentPlatform
             this.UserAccesses = new HashSet<UserAccess>();
         }
     
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string ProjectName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

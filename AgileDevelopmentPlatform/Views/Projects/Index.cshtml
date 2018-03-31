@@ -1,5 +1,6 @@
 ﻿@using AgileDevelopmentPlatform.Models
-@model AgileDevelopmentPlatform.Models.Projects
+@model List<AgileDevelopmentPlatform.Models.ProjectModel>
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,24 +8,26 @@
 
 
 <h2>ProjectList</h2>
-<button class="button btn-link">@Html.ActionLink("Create new project","New","Projects")</button>
-@if (Model.List.Count > 0)
+
+<button class="button btn-link">@Html.ActionLink("Create new project", "New", "Projects")</button>
+
+@if (@Model.Count>0)
 {
     <table id="projects" class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>Project</th>
-            <th>Delete</th>
-        </tr>
+            <tr>
+                <th>Project</th>
+                <th>Delete</th>
+            </tr>
         </thead>
         <tbody>
-            @foreach (ProjectModel project in Model.List)
-              {
-              <tr>
-                 <td>@Html.ActionLink(project.Name, "Edit", "Projects", new { id = project.Id },null)</td>
-                 <td> <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button></td>
-              </tr>
-              }
+            @foreach (ProjectModel project in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(project.Name, "View", "Projects", new { id = project.Id }, null)</td>
+                    <td> <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button></td>
+                </tr>
+            }
         </tbody>
 
     </table>
@@ -37,22 +40,25 @@ else
 @section scripts
 {
     <script>
-        $(document).ready(function() {
-           var table= $("#projects").DataTable();
+        $(document).ready(function () {
+            var table = $("#projects").DataTable();
 
             $("#projects").on("click",
                 ".js-delete",
-                function() {
+                function () {
+
 
                     var button = $(this);
                     bootbox.confirm("Are you sure you want to delete the selected project?",
-                        function(result) {
+                        function (result) {
                             if (result) {
                                 $.ajax({
                                     url: "/api/projects/" + button.attr("data-project-id"),
                                     method: "DELETE",
                                     success: function () {
                                         table.row(button.parents("tr").remove()).draw();
+                                        window.location.reload(true);
+
                                     }
 
                                 });

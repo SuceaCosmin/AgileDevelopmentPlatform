@@ -7,19 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AgileDevelopmentPlatform
+namespace AgileDevelopmentPlatform.Tests
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Task
+    public partial class UserAccess
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Nullable<int> ProjectId { get; set; }
-        public Nullable<int> TaskInitiatorId { get; set; }
-        public string Status { get; set; }
+        public int ID { get; set; }
+        public int ProjectID { get; set; }
+        public int UserID { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual User User { get; set; }

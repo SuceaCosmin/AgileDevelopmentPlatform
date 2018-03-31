@@ -1,0 +1,74 @@
+﻿
+@using AgileDevelopmentPlatform.Models
+@model AgileDevelopmentPlatform.Models.ProjectViewModel
+@{
+    ViewBag.Title = "ViewProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ViewProject</h2>
+<div>
+    <div>
+        <H2>@Model.Name</H2>
+    </div>
+    <div class="form-group" id="backlogSection">
+        <div class="row">
+            <div class="col-md-10">
+                <H1>Backlog</H1>
+            </div>
+            <div class="col-md-2">
+                <button class="button btn-success hover"  onclick="CreateNewTask(@Model.Id)">Create task</button>
+            </div>
+        </div>
+        <table id="backlog" class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (TaskModel task in Model.TaskList)
+            {
+                <tr>
+                    <td>@task.Name</td>
+                    <td>@task.Status</td>
+                    <td><button class="btn-success">@Html.ActionLink("Edit", "New", "Projects")</button></td>
+
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div class="modal fade" id="taskCreationModal">
+            <div class="modal-dialog">
+                <div class="modal-content" id="newTaskCreationBody">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3>New task</h3>
+                    </div>
+                    <div class="modal-body" >
+
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function CreateNewTask(projectId) {
+
+
+        $("#newTaskCreationBody").load('@Url.Action("NewTask","Projects",new{projectId=@Model.Id})',
+            function() {
+                $("#taskCreationModal").modal("show");
+            });
+
+
+    };
+
+  
+</script>

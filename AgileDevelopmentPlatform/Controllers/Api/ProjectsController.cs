@@ -13,30 +13,24 @@ namespace AgileDevelopmentPlatform.Controllers.Api
     public class ProjectsController : ApiController
     {
 
-        private AgileDevelopmentDatabaseEntities db;
+        private DataManager dataManager;
 
         public ProjectsController()
         {
-            db=new AgileDevelopmentDatabaseEntities();
+            dataManager = new DataManager();
+            
         }
 
         // GET /api/projects
         public IEnumerable<ProjectModel> GetProjectModels()
         {
-            List<ProjectModel> projects= new List<ProjectModel>();
-
-            foreach (var project in db.Projects.ToList())
-            {
-                projects.Add(Mapper.Map<ProjectModel>(project));
-            }
-
-            return projects;
+            return dataManager.ProjectList;
         }
 
         //GET /api/projects/1
         public IHttpActionResult GetProjectModel(int projectId)
         {
-           var project= db.Projects.SingleOrDefault(proj => proj.ID == projectId);
+            var project = dataManager.FindProjectById(projectId);
             if (project == null)
             {
                 return NotFound();
@@ -56,10 +50,7 @@ namespace AgileDevelopmentPlatform.Controllers.Api
                 return BadRequest();
             }
 
-            Project project = Mapper.Map<Project>(newProject);
-            db.Projects.Add(project);
-            db.SaveChanges();
-            Mapper.Map(project, newProject);
+            newProject= dataManager.AddProject(newProject);
             return Created(new Uri(Request.RequestUri+"/"+newProject.Id), newProject);
 
         }
@@ -73,27 +64,26 @@ namespace AgileDevelopmentPlatform.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
-            var projectInDb = db.Projects.SingleOrDefault(proj => proj.ID == id);
+            var projectInDb = dataManager.FindProjectById(id);
             if (projectInDb == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-
-            Mapper.Map(project, projectInDb);
-            db.SaveChanges();
+            dataManager.UpdateProject(project);
+            dataManager.SaveChanges();
 
         }
 
         public void DeleteProject(int id)
         {
-            var projectInDb = db.Projects.SingleOrDefault(proj => proj.ID == id);
+            var projectInDb = dataManager.FindProjectById(id);
             if (projectInDb == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            db.Projects.Remove(projectInDb);
-            db.SaveChanges();
+            dataManager.RemoveProject(id);
+            dataManager.SaveChanges();
         }
 
     }

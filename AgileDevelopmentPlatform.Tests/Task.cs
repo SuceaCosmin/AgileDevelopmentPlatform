@@ -7,17 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AgileDevelopmentPlatform
+namespace AgileDevelopmentPlatform.Tests
 {
     using System;
     using System.Collections.Generic;
     
     public partial class Task
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Nullable<int> ProjectId { get; set; }
+        public Nullable<int> ProjectID { get; set; }
         public Nullable<int> TaskInitiatorId { get; set; }
         public string Status { get; set; }
     

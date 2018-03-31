@@ -5,13 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7e6435b40d8143bcaa41cb87e8d9f7de" Name="Diagram1">
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Project" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Task" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.User" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.UserAccess" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable1" ManuallyRouted="false" />
-        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccessTable_ProjectTable" ManuallyRouted="false" />
-        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccessTable_UserTable" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Project" Width="1.5" PointX="0.75" PointY="7.25" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Task" Width="1.5" PointX="3" PointY="3.5" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.User" Width="1.5" PointX="0.75" PointY="3.625" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.UserAccess" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable1" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccessTable_ProjectTable" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_User" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccessTable_UserTable" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,4 +1,5 @@
-﻿using AgileDevelopmentPlatform.Models;
+﻿using System.Web.ClientServices.Providers;
+using AgileDevelopmentPlatform.Models;
 using AutoMapper;
 
 namespace AgileDevelopmentPlatform
@@ -7,12 +8,17 @@ namespace AgileDevelopmentPlatform
     {
         public AutomapperProfile()
         {
+            //Project related mappings
             CreateMap<Project, ProjectModel>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ProjectName));
-
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ProjectName))
+                .ForMember(dest => dest.TaskList, opt => opt.MapFrom(src => src.Tasks));
+                
             CreateMap<ProjectModel, Project>()
-                .ForMember(dest => dest.ProjectName,opt=>opt.MapFrom(src=>src.Name));
+                .ForMember(dest => dest.ProjectName,opt=>opt.MapFrom(src=>src.Name))
+                .ForMember(dest => dest.Tasks, opt => opt.MapFrom(src => src.TaskList));
 
+            CreateMap<Task, TaskModel>();
+            CreateMap<TaskModel, Task>();
         }
     }
 }

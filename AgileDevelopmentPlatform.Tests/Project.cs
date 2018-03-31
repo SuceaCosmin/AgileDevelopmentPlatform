@@ -7,24 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AgileDevelopmentPlatform
+namespace AgileDevelopmentPlatform.Tests
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class Project
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public Project()
         {
             this.Tasks = new HashSet<Task>();
             this.UserAccesses = new HashSet<UserAccess>();
         }
     
-        public int Id { get; set; }
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int ID { get; set; }
+        public string ProjectName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> Tasks { get; set; }
