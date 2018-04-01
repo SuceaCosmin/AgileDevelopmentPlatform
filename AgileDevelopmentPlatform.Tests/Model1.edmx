@@ -29,7 +29,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProjectID" Type="int" />
+          <Property Name="ProjectId" Type="int" />
           <Property Name="TaskInitiatorId" Type="int" />
           <Property Name="Status" Type="nchar" MaxLength="10" />
         </EntityType>
@@ -47,8 +47,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="ProjectID" Type="int" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Task_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
@@ -70,7 +70,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="ProjectID" />
+              <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -82,7 +82,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="UserAccess">
-              <PropertyRef Name="ProjectID" />
+              <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -94,7 +94,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="UserAccess">
-              <PropertyRef Name="UserID" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -152,7 +152,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectID" Type="Int32" />
+          <Property Name="ProjectId" Type="Int32" />
           <Property Name="TaskInitiatorId" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="Project" Relationship="Self.FK_TaskTable_ProjectTable1" FromRole="Task" ToRole="Project" />
@@ -174,8 +174,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="ProjectID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Project" Relationship="Self.FK_UserAccessTable_ProjectTable" FromRole="UserAccess" ToRole="Project" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserAccessTable_UserTable" FromRole="UserAccess" ToRole="User" />
         </EntityType>
@@ -187,7 +187,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="ProjectID" />
+              <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -199,7 +199,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="UserAccess">
-              <PropertyRef Name="ProjectID" />
+              <PropertyRef Name="ProjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -223,7 +223,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="UserAccess">
-              <PropertyRef Name="UserID" />
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -231,7 +231,7 @@
           <EntitySet Name="Projects" EntityType="Self.Project" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="Tasks" EntityType="Self.Task" />
-          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserList" EntityType="Self.User" />
           <EntitySet Name="UserAccesses" EntityType="Self.UserAccess" />
           <AssociationSet Name="FK_TaskTable_ProjectTable1" Association="Self.FK_TaskTable_ProjectTable1">
             <End Role="Project" EntitySet="Projects" />
@@ -242,11 +242,11 @@
             <End Role="UserAccess" EntitySet="UserAccesses" />
           </AssociationSet>
           <AssociationSet Name="FK_Task_User" Association="Self.FK_Task_User">
-            <End Role="User" EntitySet="Users" />
+            <End Role="User" EntitySet="UserList" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="FK_UserAccessTable_UserTable" Association="Self.FK_UserAccessTable_UserTable">
-            <End Role="User" EntitySet="Users" />
+            <End Role="User" EntitySet="UserList" />
             <End Role="UserAccess" EntitySet="UserAccesses" />
           </AssociationSet>
         </EntityContainer>
@@ -281,13 +281,13 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
                 <ScalarProperty Name="TaskInitiatorId" ColumnName="TaskInitiatorId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
+          <EntitySetMapping Name="UserList">
             <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -301,8 +301,8 @@
             <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.UserAccess">
               <MappingFragment StoreEntitySet="UserAccess">
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

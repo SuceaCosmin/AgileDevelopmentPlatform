@@ -240,6 +240,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\ProjectsController.cs" />
+    <Compile Include="Controllers\Api\TasksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
@@ -253,6 +254,8 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
     <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\UserSelectViewModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>
@@ -530,6 +533,7 @@
     <Content Include="Views\Projects\AddProject.cshtml" />
     <Content Include="Views\Projects\ViewProject.cshtml" />
     <Content Include="Views\Projects\NewTask.cshtml" />
+    <Content Include="Views\Projects\EditTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

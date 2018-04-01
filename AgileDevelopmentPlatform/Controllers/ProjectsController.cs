@@ -82,7 +82,7 @@ namespace AgileDevelopmentPlatform.Controllers
            
         }
 
-        public ActionResult View(int id)
+        public ActionResult ViewProject(int id)
         {
             var project = dataManager.FindProjectById(id);
 
@@ -91,12 +91,22 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 return HttpNotFound();
             }
+            List<ReferenceTaskViewModel> taskList= new List<ReferenceTaskViewModel>();
+            foreach (var taskModel in project.TaskList)
+            {
+                ReferenceTaskViewModel taskReference = new ReferenceTaskViewModel()
+                {
+                    TaskId = taskModel.Id,
+                    TaskName = taskModel.Name
+                };
+                taskList.Add(taskReference);
+            }
 
             ProjectViewModel viewModel = new ProjectViewModel()
             {
                 Name = project.Name,
                 Id = project.Id,
-                TaskList = project.TaskList
+                TaskList = taskList
             };
 
 
@@ -108,37 +118,90 @@ namespace AgileDevelopmentPlatform.Controllers
         {
 
 
-            ViewBag.PriorityList = TaskPriorities.PriorityList;
+            ViewBag.PriorityList = TaskPriority.List;
             NewTaskViewModel viewModel= new NewTaskViewModel()
             {
-                ProjectID =projectID
+                ProjectId =projectID,
+                PriorityType = TaskPriority.List
+              
                 
             };
             return PartialView("NewTask", viewModel);
         }
 
         [ValidateAntiForgeryToken]
-        public ActionResult SaveTask(NewTaskViewModel taskView)
+        public ActionResult AddNewTask(NewTaskViewModel taskView)
         {
-            //TODO  see how to make the client side validation work.
+            //TODO: see how to make the client side validation work.
+            //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
             if (!ModelState.IsValid)
             {
-                return View("NewTask", taskView);
+                return PartialView("NewTask", taskView);
             }
 
+            //TODO update the behavior so that the responconsible user can be null at creation time and the Initiator shall be the logged user
             TaskModel model=new TaskModel()
             {
                 Id=0,
                 Name = taskView.Name,
+                TaskInitiatorId = 1,
+                ResponsibleUserId = 1,
                 Description = taskView.Description,
-                ProjectId = taskView.ProjectID,
+                ProjectId = taskView.ProjectId,
                 Status = "Open"
             };
 
             dataManager.AddTask(model);
             dataManager.SaveChanges();
 
-            return RedirectToAction("View", "Projects",new{Id=taskView.ProjectID});
+            return RedirectToAction("ViewProject", "Projects",new{Id=taskView.ProjectId});
+        }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateTask(EditTaskViewModel taskView)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("EditTask", taskView);
+            }
+
+            TaskModel taskModel=Mapper.Map<TaskModel>(taskView);
+            dataManager.UpdateTask(taskModel);
+            dataManager.SaveChanges();
+
+
+            return RedirectToAction("ViewProject", "Projects", new { Id = 8 });
+        }
+
+        public ActionResult EditTask(int taskId)
+        {
+           
+            TaskModel task= dataManager.FindTaskById(taskId);
+
+            if (task == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<UserSelectViewModel> userList =new List<UserSelectViewModel>();
+            foreach (var userModel in dataManager.UserList)
+            {
+                UserSelectViewModel user=new UserSelectViewModel()
+                {
+                    UserId = userModel.Id,
+                    UserName = userModel.UserName
+                };
+                userList.Add(user);
+                
+            }
+
+
+            EditTaskViewModel model = Mapper.Map<EditTaskViewModel>(task);
+            model.UserList = userList;
+            model.PriorityType = TaskPriority.List;
+            model.TaskStateList = TaskState.List;
+
+            return  PartialView("EditTask", model);
         }
     }
 }

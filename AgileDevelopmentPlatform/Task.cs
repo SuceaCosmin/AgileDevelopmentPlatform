@@ -17,11 +17,14 @@ namespace AgileDevelopmentPlatform
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Nullable<int> ProjectId { get; set; }
-        public Nullable<int> TaskInitiatorId { get; set; }
+        public int ProjectId { get; set; }
+        public int TaskInitiatorId { get; set; }
         public string Status { get; set; }
+        public string Priority { get; set; }
+        public Nullable<int> ResponsibleUserId { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

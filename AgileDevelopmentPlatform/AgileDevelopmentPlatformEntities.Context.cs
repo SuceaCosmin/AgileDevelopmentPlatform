@@ -25,9 +25,9 @@ namespace AgileDevelopmentPlatform
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Project> Projects { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccess> UserAccesses { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
     }
 }

@@ -20,21 +20,19 @@
                 <button class="button btn-success hover"  onclick="CreateNewTask(@Model.Id)">Create task</button>
             </div>
         </div>
-        <table id="backlog" class="table table-bordered table-hover">
+        <table id="backlogTable" class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Status</th>
                 <th>Edit</th>
             </tr>
             </thead>
             <tbody>
-            @foreach (TaskModel task in Model.TaskList)
+            @foreach (ReferenceTaskViewModel task in Model.TaskList)
             {
                 <tr>
-                    <td>@task.Name</td>
-                    <td>@task.Status</td>
-                    <td><button class="btn-success">@Html.ActionLink("Edit", "New", "Projects")</button></td>
+                    <td>@task.TaskName</td>
+                    <td><button class="btn-success" onclick="EditTask(@task.TaskId)">Update</button><button class="btn-danger " onclick="DeleteTask(@task.TaskId)">Remove</button></td>
 
                 </tr>
             }
@@ -58,17 +56,61 @@
 
 </div>
 
-<script>
-    function CreateNewTask(projectId) {
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval");
+    <script>
+        $(document).ready(function() {
+            var table = $("#backlogTable").DataTable();
+
+            $("#backlogTable").on("click",
+                ".js-delete",
+                function() {
+
+                  
 
 
-        $("#newTaskCreationBody").load('@Url.Action("NewTask","Projects",new{projectId=@Model.Id})',
-            function() {
-                $("#taskCreationModal").modal("show");
-            });
+                });
+        });
+
+        function CreateNewTask(id) {
 
 
-    };
+            $("#newTaskCreationBody").load('@Url.Action("NewTask", "Projects", new {projectId = @Model.Id})',
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
 
-  
-</script>
+
+        };
+
+        function EditTask(taskId) {
+            $("#newTaskCreationBody").load('@Url.Action("EditTask", "Projects")?taskID=' + taskId,
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
+        }
+
+        function DeleteTask(taskId) {
+            var table = $("#backlogTable").DataTable();
+            var button = $(this);
+            bootbox.confirm("Are you sure you want to delete the selected task?",
+                function(result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/tasks/" + taskId,
+                            method: "DELETE",
+                            success: function() {
+                                table.row(button.parents("tr").remove()).draw();
+                                window.location.reload(true);
+
+                            }
+
+                        });
+                    }
+                });
+        }
+
+
+    </script>
+}
+
