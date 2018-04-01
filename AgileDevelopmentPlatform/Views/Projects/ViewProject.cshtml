@@ -6,10 +6,58 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ViewProject</h2>
 <div>
     <div>
-        <H2>@Model.Name</H2>
+        <H2>Project @Model.Name</H2>
+    </div>
+    
+    
+    <div id="sprintSection" class="form-group">
+        @if (!Model.SprintList.Any())
+    {
+        <p>No sprints have been created yet.</p>
+}
+else
+{
+    foreach (SprintViewModel sprintModel in Model.SprintList)
+    {
+        <h2>@sprintModel.Name</h2>
+        if (!sprintModel.Tasks.Any())
+        {
+            <p>No task has been assigned  to this sprint yet.</p>
+    }
+    else
+    {
+        <div class="row">        
+            <h3>Open tasks @sprintModel.OpenTasks</h3>
+            <h3>Workink tasks @sprintModel.WorkingTasks</h3>
+            <h3>Finished tasks @sprintModel.FinishedTasks</h3>
+        </div>
+
+        <div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ReferenceTaskViewModel task in sprintModel.Tasks)
+                {
+                    <tr>
+                        <td>@task.Name</td>
+                        <td><button class="btn-success" onclick="EditTask(@task.Id)">Update</button><button class="btn-danger " onclick="DeleteTask(@task.Id)">Remove</button></td>
+
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+}
+
+}
+}
     </div>
     <div class="form-group" id="backlogSection">
         <div class="row">
@@ -20,24 +68,32 @@
                 <button class="button btn-success hover"  onclick="CreateNewTask(@Model.Id)">Create task</button>
             </div>
         </div>
-        <table id="backlogTable" class="table table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Edit</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (ReferenceTaskViewModel task in Model.TaskList)
-            {
+        @if (!Model.TaskList.Any())
+        {
+            <p>No tasks are available in backlog section.</p>
+        }
+        else
+        {
+            <table id="backlogTable" class="table table-bordered table-hover">
+                <thead>
                 <tr>
-                    <td>@task.TaskName</td>
-                    <td><button class="btn-success" onclick="EditTask(@task.TaskId)">Update</button><button class="btn-danger " onclick="DeleteTask(@task.TaskId)">Remove</button></td>
-
+                    <th>Name</th>
+                    <th>Edit</th>
                 </tr>
-            }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach (ReferenceTaskViewModel task in Model.TaskList)
+                {
+                    <tr>
+                        <td>@task.Name</td>
+                        <td><button class="btn-success" onclick="EditTask(@task.Id)">Update</button><button class="btn-danger " onclick="DeleteTask(@task.Id)">Remove</button></td>
+
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+
         <div class="modal fade" id="taskCreationModal">
             <div class="modal-dialog">
                 <div class="modal-content" id="newTaskCreationBody">

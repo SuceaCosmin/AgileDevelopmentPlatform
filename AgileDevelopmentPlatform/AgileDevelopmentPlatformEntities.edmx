@@ -12,6 +12,15 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProjectName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Sprint">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+          <Property Name="TargetDate" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Task">
           <Key>
             <PropertyRef Name="Id" />
@@ -21,9 +30,10 @@
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
           <Property Name="ProjectId" Type="int" Nullable="false" />
           <Property Name="TaskInitiatorId" Type="int" Nullable="false" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" />
-          <Property Name="Priority" Type="nvarchar" MaxLength="50" />
           <Property Name="ResponsibleUserId" Type="int" />
+          <Property Name="SprintId" Type="int" />
+          <Property Name="Priority" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -42,6 +52,18 @@
           <Property Name="ProjectId" Type="int" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Sprint_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="1" />
+          <End Role="Sprint" Type="Self.Sprint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Sprint">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Task_ResponsibleUser">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Task" Type="Self.Task" Multiplicity="*" />
@@ -51,6 +73,18 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="ResponsibleUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_Sprint">
+          <End Role="Sprint" Type="Self.Sprint" Multiplicity="0..1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sprint">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="SprintId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -104,11 +138,20 @@
         </Association>
         <EntityContainer Name="AgileDevelopmentDatabaseModelStoreContainer">
           <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sprint" EntityType="Self.Sprint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAccess" EntityType="Self.UserAccess" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Sprint_Project" Association="Self.FK_Sprint_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Sprint" EntitySet="Sprint" />
+          </AssociationSet>
           <AssociationSet Name="FK_Task_ResponsibleUser" Association="Self.FK_Task_ResponsibleUser">
             <End Role="User" EntitySet="User" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_Sprint" Association="Self.FK_Task_Sprint">
+            <End Role="Sprint" EntitySet="Sprint" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
           <AssociationSet Name="FK_Task_TaskInitiator" Association="Self.FK_Task_TaskInitiator">
@@ -140,13 +183,22 @@
             <End Role="UserAccess" EntitySet="UserAccesses" />
           </AssociationSet>
           <EntitySet Name="Projects" EntityType="AgileDevelopmentDatabaseModel.Project" />
+          <EntitySet Name="Sprints" EntityType="AgileDevelopmentDatabaseModel.Sprint" />
+          <EntitySet Name="Tasks" EntityType="AgileDevelopmentDatabaseModel.Task" />
+          <AssociationSet Name="FK_Sprint_Project" Association="AgileDevelopmentDatabaseModel.FK_Sprint_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Sprint" EntitySet="Sprints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TaskTable_ProjectTable" Association="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
           <AssociationSet Name="FK_UserAccessTable_ProjectTable" Association="AgileDevelopmentDatabaseModel.FK_UserAccessTable_ProjectTable">
             <End Role="Project" EntitySet="Projects" />
             <End Role="UserAccess" EntitySet="UserAccesses" />
           </AssociationSet>
-          <EntitySet Name="Tasks" EntityType="AgileDevelopmentDatabaseModel.Task" />
-          <AssociationSet Name="FK_TaskTable_ProjectTable" Association="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable">
-            <End Role="Project" EntitySet="Projects" />
+          <AssociationSet Name="FK_Task_Sprint" Association="AgileDevelopmentDatabaseModel.FK_Task_Sprint">
+            <End Role="Sprint" EntitySet="Sprints" />
             <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           <AssociationSet Name="FK_Task_ResponsibleUser" Association="AgileDevelopmentDatabaseModel.FK_Task_ResponsibleUser">
@@ -198,9 +250,63 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProjectName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="UserAccesses" Relationship="AgileDevelopmentDatabaseModel.FK_UserAccessTable_ProjectTable" FromRole="Project" ToRole="UserAccess" />
+          <NavigationProperty Name="Sprints" Relationship="AgileDevelopmentDatabaseModel.FK_Sprint_Project" FromRole="Project" ToRole="Sprint" />
           <NavigationProperty Name="Tasks" Relationship="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable" FromRole="Project" ToRole="Task" />
+          <NavigationProperty Name="UserAccesses" Relationship="AgileDevelopmentDatabaseModel.FK_UserAccessTable_ProjectTable" FromRole="Project" ToRole="UserAccess" />
         </EntityType>
+        <EntityType Name="Sprint">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="TargetDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Project" Relationship="AgileDevelopmentDatabaseModel.FK_Sprint_Project" FromRole="Sprint" ToRole="Project" />
+          <NavigationProperty Name="Tasks" Relationship="AgileDevelopmentDatabaseModel.FK_Task_Sprint" FromRole="Sprint" ToRole="Task" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="TaskInitiatorId" Type="Int32" Nullable="false" />
+          <Property Name="ResponsibleUserId" Type="Int32" />
+          <Property Name="SprintId" Type="Int32" />
+          <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Project" Relationship="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable" FromRole="Task" ToRole="Project" />
+          <NavigationProperty Name="Sprint" Relationship="AgileDevelopmentDatabaseModel.FK_Task_Sprint" FromRole="Task" ToRole="Sprint" />
+          <NavigationProperty Name="User" Relationship="AgileDevelopmentDatabaseModel.FK_Task_ResponsibleUser" FromRole="Task" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="AgileDevelopmentDatabaseModel.FK_Task_TaskInitiator" FromRole="Task" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Sprint_Project">
+          <End Type="AgileDevelopmentDatabaseModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="AgileDevelopmentDatabaseModel.Sprint" Role="Sprint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Sprint">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TaskTable_ProjectTable">
+          <End Type="AgileDevelopmentDatabaseModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="AgileDevelopmentDatabaseModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_UserAccessTable_ProjectTable">
           <End Type="AgileDevelopmentDatabaseModel.Project" Role="Project" Multiplicity="1" />
           <End Type="AgileDevelopmentDatabaseModel.UserAccess" Role="UserAccess" Multiplicity="*" />
@@ -213,31 +319,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Task">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectId" Type="Int32" Nullable="false" />
-          <Property Name="TaskInitiatorId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Priority" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ResponsibleUserId" Type="Int32" />
-          <NavigationProperty Name="Project" Relationship="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable" FromRole="Task" ToRole="Project" />
-          <NavigationProperty Name="User" Relationship="AgileDevelopmentDatabaseModel.FK_Task_ResponsibleUser" FromRole="Task" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="AgileDevelopmentDatabaseModel.FK_Task_TaskInitiator" FromRole="Task" ToRole="User" />
-        </EntityType>
-        <Association Name="FK_TaskTable_ProjectTable">
-          <End Type="AgileDevelopmentDatabaseModel.Project" Role="Project" Multiplicity="1" />
+        <Association Name="FK_Task_Sprint">
+          <End Type="AgileDevelopmentDatabaseModel.Sprint" Role="Sprint" Multiplicity="0..1" />
           <End Type="AgileDevelopmentDatabaseModel.Task" Role="Task" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Project">
+            <Principal Role="Sprint">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Task">
-              <PropertyRef Name="ProjectId" />
+              <PropertyRef Name="SprintId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -298,12 +388,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Sprints">
+            <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.Sprint">
+              <MappingFragment StoreEntitySet="Sprint">
+                <ScalarProperty Name="TargetDate" ColumnName="TargetDate" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.Task">
               <MappingFragment StoreEntitySet="Task">
-                <ScalarProperty Name="ResponsibleUserId" ColumnName="ResponsibleUserId" />
-                <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="SprintId" ColumnName="SprintId" />
+                <ScalarProperty Name="ResponsibleUserId" ColumnName="ResponsibleUserId" />
                 <ScalarProperty Name="TaskInitiatorId" ColumnName="TaskInitiatorId" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />

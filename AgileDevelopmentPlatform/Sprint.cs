@@ -12,21 +12,21 @@ namespace AgileDevelopmentPlatform
     using System;
     using System.Collections.Generic;
     
-    public partial class Task
+    public partial class Sprint
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Sprint()
+        {
+            this.Tasks = new HashSet<Task>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
         public int ProjectId { get; set; }
-        public int TaskInitiatorId { get; set; }
-        public Nullable<int> ResponsibleUserId { get; set; }
-        public Nullable<int> SprintId { get; set; }
-        public string Priority { get; set; }
-        public string Status { get; set; }
+        public string TargetDate { get; set; }
     
         public virtual Project Project { get; set; }
-        public virtual Sprint Sprint { get; set; }
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

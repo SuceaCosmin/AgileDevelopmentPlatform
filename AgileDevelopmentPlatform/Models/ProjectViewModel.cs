@@ -9,7 +9,10 @@ namespace AgileDevelopmentPlatform.Models
     public class ProjectViewModel
     {
         public int Id { get; set; }
+
         public string Name { get; set; }
+
+        public IEnumerable<SprintViewModel> SprintList { get; set; }
 
         public IEnumerable<ReferenceTaskViewModel> TaskList { get; set; }
     }
@@ -37,9 +40,7 @@ namespace AgileDevelopmentPlatform.Models
         public int TaskId { get; set; }
 
         public int ProjectId { get; set; }
-
-
-       
+    
     }
 
     public class EditTaskViewModel
@@ -71,7 +72,8 @@ namespace AgileDevelopmentPlatform.Models
 
     public class ReferenceTaskViewModel
     {
-        public string TaskName { get; set; }
-        public int TaskId { get; set; }
+        public string Name { get; set; }
+
+        public int Id { get; set; }
     }
 }

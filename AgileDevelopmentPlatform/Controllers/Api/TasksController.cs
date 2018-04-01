@@ -26,8 +26,8 @@ namespace AgileDevelopmentPlatform.Controllers.Api
             {
                 taskList.Add(new ReferenceTaskViewModel()
                 {
-                    TaskId = model.Id,
-                    TaskName = model.Name
+                    Id = model.Id,
+                    Name = model.Name
                 });
             });
 
@@ -45,8 +45,8 @@ namespace AgileDevelopmentPlatform.Controllers.Api
 
             ReferenceTaskViewModel model=new ReferenceTaskViewModel()
             {
-                TaskId = taskInDb.Id,
-                TaskName = taskInDb.Name
+                Id = taskInDb.Id,
+                Name = taskInDb.Name
             };
 
 

@@ -12,12 +12,12 @@ namespace AgileDevelopmentPlatform.Controllers
     public class ProjectsController : Controller
     {
 
-        private DataManager dataManager;
+        private readonly DataManager _dataManager;
  
 
         public ProjectsController()
         {
-            dataManager=new DataManager();
+            _dataManager=new DataManager();
          
         }
 
@@ -25,7 +25,7 @@ namespace AgileDevelopmentPlatform.Controllers
         public ActionResult Index()
         {
              
-            return View(dataManager.ProjectList);
+            return View(_dataManager.ProjectList);
         }
 
         public ActionResult New()
@@ -51,13 +51,13 @@ namespace AgileDevelopmentPlatform.Controllers
 
             if (projectModel.Id == 0)
             {
-                dataManager.AddProject(projectModel);
-                dataManager.SaveChanges();
+                _dataManager.AddProject(projectModel);
+                _dataManager.SaveChanges();
 
 
             }else{
-                dataManager.UpdateProject(projectModel);
-                dataManager.SaveChanges();
+                _dataManager.UpdateProject(projectModel);
+                _dataManager.SaveChanges();
             }
    
 
@@ -67,7 +67,7 @@ namespace AgileDevelopmentPlatform.Controllers
         public ActionResult Edit(int id)
         {
              ;
-            var project = dataManager.FindProjectById(id);
+            var project = _dataManager.FindProjectById(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -84,7 +84,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult ViewProject(int id)
         {
-            var project = dataManager.FindProjectById(id);
+            var project = _dataManager.FindProjectById(id);
 
              
             if (project == null)
@@ -94,19 +94,70 @@ namespace AgileDevelopmentPlatform.Controllers
             List<ReferenceTaskViewModel> taskList= new List<ReferenceTaskViewModel>();
             foreach (var taskModel in project.TaskList)
             {
-                ReferenceTaskViewModel taskReference = new ReferenceTaskViewModel()
+                if (taskModel.SprintId == null || taskModel.SprintId == 0)
                 {
-                    TaskId = taskModel.Id,
-                    TaskName = taskModel.Name
-                };
-                taskList.Add(taskReference);
+
+                    ReferenceTaskViewModel taskReference = new ReferenceTaskViewModel()
+                    {
+                        Id = taskModel.Id,
+                        Name = taskModel.Name
+                    };
+                    taskList.Add(taskReference);
+                }
+
             }
+
+            List<SprintViewModel> sprintList=new List<SprintViewModel>();
+            foreach (var sprintModel in project.SprintList)
+            {
+                SprintViewModel model = Mapper.Map<SprintViewModel>(sprintModel);
+
+                int openTasks = 0;
+                int workingTask = 0;
+                int finishedTasks = 0;
+                try
+                {
+                    //TODO  see why what is the problem and why the respons is 0 0 0 
+                    model.Tasks.ForEach(task =>
+                    {
+                        TaskModel currentTask = project.TaskList.Find(taskModel => taskModel.Id == model.Id);
+
+                        if (currentTask.Status != null)
+                        {
+                            if (currentTask.Status.Equals(TaskState.Open))
+                            {
+                                openTasks++;
+                            }
+                            else if (currentTask.Status.Equals(TaskState.Working))
+                            {
+                                workingTask++;
+                            }
+                            else if (currentTask.Status.Equals(TaskState.Finished))
+                            {
+                                finishedTasks++;
+                            }
+                        }
+
+                    });
+                }catch{
+                  Console.WriteLine("Failed to calculate  sprint task status for project "+project.Name);
+                }
+                model.OpenTasks = openTasks;
+                model.WorkingTasks = workingTask;
+                model.FinishedTasks = finishedTasks;
+                
+                sprintList.Add(model);
+
+            }
+
 
             ProjectViewModel viewModel = new ProjectViewModel()
             {
                 Name = project.Name,
                 Id = project.Id,
-                TaskList = taskList
+                TaskList = taskList,
+                SprintList = sprintList
+                
             };
 
 
@@ -151,8 +202,8 @@ namespace AgileDevelopmentPlatform.Controllers
                 Status = "Open"
             };
 
-            dataManager.AddTask(model);
-            dataManager.SaveChanges();
+            _dataManager.AddTask(model);
+            _dataManager.SaveChanges();
 
             return RedirectToAction("ViewProject", "Projects",new{Id=taskView.ProjectId});
         }
@@ -166,8 +217,8 @@ namespace AgileDevelopmentPlatform.Controllers
             }
 
             TaskModel taskModel=Mapper.Map<TaskModel>(taskView);
-            dataManager.UpdateTask(taskModel);
-            dataManager.SaveChanges();
+            _dataManager.UpdateTask(taskModel);
+            _dataManager.SaveChanges();
 
 
             return RedirectToAction("ViewProject", "Projects", new { Id = 8 });
@@ -176,7 +227,7 @@ namespace AgileDevelopmentPlatform.Controllers
         public ActionResult EditTask(int taskId)
         {
            
-            TaskModel task= dataManager.FindTaskById(taskId);
+            TaskModel task= _dataManager.FindTaskById(taskId);
 
             if (task == null)
             {
@@ -184,7 +235,7 @@ namespace AgileDevelopmentPlatform.Controllers
             }
 
             List<UserSelectViewModel> userList =new List<UserSelectViewModel>();
-            foreach (var userModel in dataManager.UserList)
+            foreach (var userModel in _dataManager.UserList)
             {
                 UserSelectViewModel user=new UserSelectViewModel()
                 {

@@ -14,7 +14,6 @@ namespace AgileDevelopmentPlatform.Models
             _databaseEntities=new AgileDevelopmentDatabaseEntities();
         }
 
-
         #region Project region
 
         public List<ProjectModel> ProjectList
@@ -70,6 +69,17 @@ namespace AgileDevelopmentPlatform.Models
 
             return false;
         }
+        #endregion
+
+        #region Sprint region
+
+        public List<SprintModel> FindSprintByProjectName(int projectId)
+        {
+            List<SprintModel> sprintList=new List<SprintModel>();
+
+            return sprintList;
+        }
+
         #endregion
 
         #region Task region

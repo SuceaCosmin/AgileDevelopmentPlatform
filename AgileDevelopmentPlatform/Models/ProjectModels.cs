@@ -58,6 +58,8 @@ namespace AgileDevelopmentPlatform.Models
 
         public int ProjectId { get; set; }
 
+        public int? SprintId { get; set; }
+
         public int TaskInitiatorId { get; set; }
 
         public string Status { get; set; }
@@ -84,6 +86,8 @@ namespace AgileDevelopmentPlatform.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public List<SprintModel> SprintList { get; set; }
 
         public List<TaskModel> TaskList { get; set; }   
 

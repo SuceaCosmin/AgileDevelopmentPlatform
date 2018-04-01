@@ -28,6 +28,7 @@ namespace AgileDevelopmentPlatform
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccess> UserAccesses { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<Sprint> Sprints { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
     }
 }

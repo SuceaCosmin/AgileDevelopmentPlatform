@@ -254,12 +254,17 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
     <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="Models\SprintModel.cs" />
+    <Compile Include="Models\SprintViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserSelectViewModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprint.cs">
+      <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Task.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
