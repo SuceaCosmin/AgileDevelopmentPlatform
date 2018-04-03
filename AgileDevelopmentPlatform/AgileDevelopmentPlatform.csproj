@@ -539,6 +539,7 @@
     <Content Include="Views\Projects\ViewProject.cshtml" />
     <Content Include="Views\Projects\NewTask.cshtml" />
     <Content Include="Views\Projects\EditTask.cshtml" />
+    <Content Include="Views\Projects\NewSprint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

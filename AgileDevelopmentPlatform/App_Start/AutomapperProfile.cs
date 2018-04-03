@@ -24,6 +24,10 @@ namespace AgileDevelopmentPlatform
             CreateMap<SprintModel, Sprint>();
 
             CreateMap<SprintModel, SprintViewModel>();
+            CreateMap<SprintViewModel, SprintModel>();
+
+            CreateMap<SprintModel, NewSprintViewModel>();
+            CreateMap<NewSprintViewModel, SprintModel>();
 
             CreateMap<Task, TaskModel>();
             CreateMap<TaskModel, Task>();

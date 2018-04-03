@@ -120,9 +120,15 @@ namespace AgileDevelopmentPlatform.Models
             var taskInDb = _databaseEntities.Tasks.SingleOrDefault(task => task.Id == taskModel.Id);
             if (taskInDb != null)
             {
+                //TODO see if there is any other way to prevent the replace of data
                 if (taskModel.ProjectId == 0)
                 {
                     taskModel.ProjectId = taskInDb.ProjectId;
+                }
+               
+                if (taskModel.SprintId == null || taskModel.SprintId == 0)
+                {
+                    taskModel.SprintId = taskInDb.SprintId;
                 }
 
                 Mapper.Map(taskModel, taskInDb);
@@ -167,6 +173,10 @@ namespace AgileDevelopmentPlatform.Models
         }
 
 
-     
+        public void AddSprint(SprintModel sprintModel)
+        {
+            Sprint sprint = Mapper.Map<Sprint>(sprintModel);
+            _databaseEntities.Sprints.Add(sprint);
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace AgileDevelopmentPlatform.Controllers
             return View(_dataManager.ProjectList);
         }
 
-        public ActionResult New()
+        public ActionResult NewProject()
         {
             ProjectCreateOrEditViewModel viewModel =new ProjectCreateOrEditViewModel();
             return View("AddProject", viewModel);
@@ -36,7 +36,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Save(ProjectCreateOrEditViewModel project)
+        public ActionResult SaveProject(ProjectCreateOrEditViewModel project)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace AgileDevelopmentPlatform.Controllers
             return RedirectToAction("Index", "Projects");
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult EditProject(int id)
         {
              ;
             var project = _dataManager.FindProjectById(id);
@@ -120,7 +120,7 @@ namespace AgileDevelopmentPlatform.Controllers
                     //TODO  see why what is the problem and why the respons is 0 0 0 
                     model.Tasks.ForEach(task =>
                     {
-                        TaskModel currentTask = project.TaskList.Find(taskModel => taskModel.Id == model.Id);
+                        TaskModel currentTask = project.TaskList.Find(taskModel => taskModel.Id == task.Id);
 
                         if (currentTask.Status != null)
                         {
@@ -128,7 +128,8 @@ namespace AgileDevelopmentPlatform.Controllers
                             {
                                 openTasks++;
                             }
-                            else if (currentTask.Status.Equals(TaskState.Working))
+                            else if (currentTask.Status.Equals(TaskState.Working)
+                                     || currentTask.Status.Equals(TaskState.Review))
                             {
                                 workingTask++;
                             }
@@ -142,6 +143,7 @@ namespace AgileDevelopmentPlatform.Controllers
                 }catch{
                   Console.WriteLine("Failed to calculate  sprint task status for project "+project.Name);
                 }
+
                 model.OpenTasks = openTasks;
                 model.WorkingTasks = workingTask;
                 model.FinishedTasks = finishedTasks;
@@ -165,14 +167,14 @@ namespace AgileDevelopmentPlatform.Controllers
           
         }
 
-        public ActionResult NewTask(int projectID)
+        public ActionResult NewTask(int projectId)
         {
 
 
             ViewBag.PriorityList = TaskPriority.List;
             NewTaskViewModel viewModel= new NewTaskViewModel()
             {
-                ProjectId =projectID,
+                ProjectId =projectId,
                 PriorityType = TaskPriority.List
               
                 
@@ -218,9 +220,11 @@ namespace AgileDevelopmentPlatform.Controllers
 
             TaskModel taskModel=Mapper.Map<TaskModel>(taskView);
             _dataManager.UpdateTask(taskModel);
+            
             _dataManager.SaveChanges();
 
 
+            //TODO remove hardcoded id and redirect to current project
             return RedirectToAction("ViewProject", "Projects", new { Id = 8 });
         }
 
@@ -254,5 +258,29 @@ namespace AgileDevelopmentPlatform.Controllers
 
             return  PartialView("EditTask", model);
         }
+
+        public ActionResult NewSprint(int projectId)
+        {
+            NewSprintViewModel model= new NewSprintViewModel()
+            {
+                ProjectId =projectId
+            };
+            return PartialView("NewSprint", model);
+        }
+
+        public ActionResult SaveSprint(NewSprintViewModel sprintViewModel)
+        {
+            if (!ModelState.IsValid){
+                return PartialView("NewSprint", sprintViewModel);
+            }
+
+            SprintModel sprintModel = Mapper.Map<SprintModel>(sprintViewModel);
+
+            _dataManager.AddSprint(sprintModel);
+            _dataManager.SaveChanges();
+
+            return RedirectToAction("ViewProject", "Projects", new { Id = sprintViewModel.ProjectId });
+        }
+
     }
 }

@@ -9,7 +9,7 @@
 
 <h2>ProjectList</h2>
 
-<button class="button btn-link">@Html.ActionLink("Create new project", "New", "Projects")</button>
+<button class="button btn-link">@Html.ActionLink("Create new project", "NewProject", "Projects")</button>
 
 @if (@Model.Count > 0)
 {
@@ -37,9 +37,6 @@ else
     <p>No projects have  been created yet.</p>
 }
 
-@section scripts
-{
- 
     <script>
         $(document).ready(function () {
             var table = $("#projects").DataTable();
@@ -69,5 +66,4 @@ else
                 });
         });
     </script>
-}
 
