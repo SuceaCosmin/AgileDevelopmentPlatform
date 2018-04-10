@@ -6,9 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval");
-}
+
 <div>
     <div>
         <H2>Project @Model.Name</H2>
@@ -24,45 +22,54 @@
         {
             foreach (SprintViewModel sprintModel in Model.SprintList)
             {
+                <div id="@sprintModel.Name">
+                    
+                    <div class="row">
+                        <div class=" col-md-10"><h2>@sprintModel.Name</h2></div>
+                        <div class=" col-md-2">
+                            <button class="btn-danger " onclick="DeleteSprint(@sprintModel.Id)">Remove</button>
+                        </div>
 
-                <h2>@sprintModel.Name</h2>
+                    </div>
 
-                if (!sprintModel.Tasks.Any())
-                {
-                    <p>No task has been assigned  to this sprint yet.</p>
-                }
-                else
-                {
+                    @if (!sprintModel.Tasks.Any())
+                    {
+                    <p>No task has been assigned to this sprint yet.</p>
+                    }
+                    else
+                    {
                     <div class="row">
                         <div class=" col-md-4"></div>
                         <div class=" col-md-2"><h4>Open tasks @sprintModel.OpenTasks</h4></div>
                         <div class=" col-md-2"><h4>Working tasks @sprintModel.WorkingTasks</h4></div>
                         <div class=" col-md-2"><h4>Finished tasks @sprintModel.FinishedTasks</h4></div>
-                        <div class=" col-md-2"></div>
+                      
 
                     </div>
 
                     <div>
                         <table class="table table-bordered">
                             <thead>
-                                <tr>
-                                    <th class="col-md-10">Name</th>
-                                    <th class="col-md-2">Edit</th>
-                                </tr>
+                            <tr>
+                                <th class="col-md-10">Name</th>
+                                <th class="col-md-2">Edit</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (ReferenceTaskViewModel task in sprintModel.Tasks)
-                                {
-                                    <tr>
-                                        <td>@task.Name</td>
-                                        <td><button class="btn-success" onclick="EditTask(@task.Id)">Update</button><button class="btn-danger " onclick="DeleteTask(@task.Id)">Remove</button></td>
+                            @foreach (ReferenceTaskViewModel task in sprintModel.Tasks)
+                            {
+                                <tr>
+                                    <td>@task.Name</td>
+                                    <td><button class="btn-success" onclick="EditTask(@task.Id)">Update</button><button class="btn-danger " onclick="DeleteTask(@task.Id)">Remove</button></td>
 
-                                    </tr>
-                                }
+                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
-                }
+                    }
+                </div>
+
 
             }
         }
@@ -184,7 +191,25 @@
                 $("#taskCreationModal").modal("show");
             });
 
-
     };
+
+    function DeleteSprint(sprintId) {
+        var button = $(this);
+        bootbox.confirm("Are you sure you want to delete the selected sprint?",
+            function(result) {
+                if (result) {
+                    $.ajax({
+                        url: "/api/sprints/" + sprintId,
+                        method: "DELETE",
+                        success: function () {
+                          
+                            window.location.reload(true);
+
+                        }
+
+                    });
+                }
+            });
+    }
 </script>
 

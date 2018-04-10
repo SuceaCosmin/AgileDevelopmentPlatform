@@ -240,6 +240,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\ProjectsController.cs" />
+    <Compile Include="Controllers\Api\SprintsController.cs" />
     <Compile Include="Controllers\Api\TasksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
