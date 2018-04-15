@@ -18,8 +18,8 @@ namespace AgileDevelopmentPlatform
         public string Name { get; set; }
         public string Description { get; set; }
         public int ProjectId { get; set; }
-        public int TaskInitiatorId { get; set; }
-        public Nullable<int> ResponsibleUserId { get; set; }
+        public string TaskInitiatorId { get; set; }
+        public string ResponsibleUserId { get; set; }
         public Nullable<int> SprintId { get; set; }
         public string Priority { get; set; }
         public string Status { get; set; }

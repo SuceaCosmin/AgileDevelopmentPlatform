@@ -153,7 +153,7 @@ namespace AgileDevelopmentPlatform.Models
 
         public void AddUser(UserModel userModel)
         {
-            User user = Mapper.Map<User>(userModel);
+            AgileDevelopmentPlatform.User user = Mapper.Map<AgileDevelopmentPlatform.User>(userModel);
             _databaseEntities.Users.Add(user);
             _databaseEntities.SaveChanges();
         }
@@ -173,7 +173,8 @@ namespace AgileDevelopmentPlatform.Models
 
         public UserModel FindUserByUserName(string userName)
         {
-            var sprint = _databaseEntities.Users.SingleOrDefault(user=>user.Name.Equals(userName));
+            //TODO update filter to find by name not  email after the name is added
+            var sprint = _databaseEntities.Users.SingleOrDefault(user=>user.Email.Equals(userName));
             if (sprint != null)
             {
                 return Mapper.Map<UserModel>(sprint);
