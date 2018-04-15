@@ -9,6 +9,7 @@ using AutoMapper;
 
 namespace AgileDevelopmentPlatform.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
 

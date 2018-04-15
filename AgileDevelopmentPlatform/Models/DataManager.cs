@@ -8,7 +8,6 @@ namespace AgileDevelopmentPlatform.Models
     {
         private readonly AgileDevelopmentDatabaseEntities _databaseEntities;
 
-
         public DataManager()
         {
             _databaseEntities=new AgileDevelopmentDatabaseEntities();
@@ -175,6 +174,13 @@ namespace AgileDevelopmentPlatform.Models
 
         #region User region
 
+        public void AddUser(UserModel userModel)
+        {
+            User user = Mapper.Map<User>(userModel);
+            _databaseEntities.Users.Add(user);
+            _databaseEntities.SaveChanges();
+        }
+
         public List<UserModel> UserList {
             get
             {
@@ -186,6 +192,17 @@ namespace AgileDevelopmentPlatform.Models
 
                 return userList;
             }
+        }
+
+        public UserModel FindUserByUserName(string userName)
+        {
+            var sprint = _databaseEntities.Users.SingleOrDefault(user=>user.Name.Equals(userName));
+            if (sprint != null)
+            {
+                return Mapper.Map<UserModel>(sprint);
+            }
+
+            return null;         
         }
 
         #endregion

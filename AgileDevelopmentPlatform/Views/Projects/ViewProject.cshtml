@@ -1,6 +1,6 @@
 ﻿
 @using AgileDevelopmentPlatform.Models
-@model AgileDevelopmentPlatform.Models.ProjectViewModel
+@model ProjectViewModel
 @{
     ViewBag.Title = "ViewProject";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -132,19 +132,8 @@
 
 
 <script>
-    $(document).ready(function() {
-        var table = $("#backlogTable").DataTable();
 
-        $("#backlogTable").on("click",
-            ".js-delete",
-            function() {
-
-
-            });
-    });
-
-
-    function CreateNewTask(id) {
+    function CreateNewTask() {
 
 
         $("#newTaskCreationBody").load('@Url.Action("NewTask", "Projects", new {projectId = @Model.Id})',
@@ -183,7 +172,7 @@
     }
 
 
-    function CreateNewSprint(projectId) {
+    function CreateNewSprint() {
 
 
         $("#newTaskCreationBody").load('@Url.Action("NewSprint", "Projects", new {projectId = @Model.Id})',
@@ -194,7 +183,6 @@
     };
 
     function DeleteSprint(sprintId) {
-        var button = $(this);
         bootbox.confirm("Are you sure you want to delete the selected sprint?",
             function(result) {
                 if (result) {
