@@ -72,34 +72,11 @@ namespace AgileDevelopmentPlatform.Models
 
         #region Sprint region
 
-        public void AddSprint(SprintModel sprintModel)
+        public List<SprintModel> FindSprintByProjectName(int projectId)
         {
-            Sprint sprint = Mapper.Map<Sprint>(sprintModel);
-            _databaseEntities.Sprints.Add(sprint);
-        }
+            List<SprintModel> sprintList=new List<SprintModel>();
 
-        public SprintModel FindSprintById(int id)
-        {
-           var sprint= _databaseEntities.Sprints.SingleOrDefault(currentSprint => currentSprint.Id == id);
-            if (sprint != null)
-            {
-                return Mapper.Map<SprintModel>(sprint);
-            }
-            
-            return null;
-
-        }
-
-        public bool RemoveSprint(int id)
-        {
-            var sprint = _databaseEntities.Sprints.SingleOrDefault(currentSprint => currentSprint.Id == id);
-            if (sprint != null)
-            {
-                _databaseEntities.Sprints.Remove(sprint);
-                return true;
-            }
-
-            return false;
+            return sprintList;
         }
 
         #endregion
@@ -212,6 +189,11 @@ namespace AgileDevelopmentPlatform.Models
             _databaseEntities.SaveChanges();
         }
 
-      
+
+        public void AddSprint(SprintModel sprintModel)
+        {
+            Sprint sprint = Mapper.Map<Sprint>(sprintModel);
+            _databaseEntities.Sprints.Add(sprint);
+        }
     }
 }

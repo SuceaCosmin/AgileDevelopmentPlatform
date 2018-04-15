@@ -57,7 +57,7 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Description { get; set; }
 
-        public int? TaskInitiatorId { get; set; }
+        public int TaskInitiatorId { get; set; }
 
         public int ResponsibleUserId { get; set; }
 

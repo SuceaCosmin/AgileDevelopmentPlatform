@@ -15,6 +15,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         private readonly DataManager _dataManager;
  
+
         public ProjectsController()
         {
             _dataManager=new DataManager();
@@ -66,7 +67,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult EditProject(int id)
         {
-             
+             ;
             var project = _dataManager.FindProjectById(id);
             if (project == null)
             {
@@ -189,7 +190,6 @@ namespace AgileDevelopmentPlatform.Controllers
             //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
             if (!ModelState.IsValid)
             {
-                taskView.PriorityType = TaskPriority.List;
                 return PartialView("NewTask", taskView);
             }
 
@@ -281,22 +281,6 @@ namespace AgileDevelopmentPlatform.Controllers
             _dataManager.SaveChanges();
 
             return RedirectToAction("ViewProject", "Projects", new { Id = sprintViewModel.ProjectId });
-        }
-
-        public ActionResult DeleteSprint(int id)
-        {
-            var sprintModel = _dataManager.FindSprintById(id);
-            if (sprintModel == null)
-            {
-                return HttpNotFound();
-
-            }
-            else
-            {
-                _dataManager.RemoveSprint(id);
-                _dataManager.SaveChanges();
-                return RedirectToAction("ViewProject", "Projects", new { Id = sprintModel.ProjectId });
-            }
         }
 
     }
