@@ -49,9 +49,8 @@ namespace AgileDevelopmentPlatform.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +63,11 @@ namespace AgileDevelopmentPlatform.Models
 
     public class RegisterViewModel
     {
+
+        [Required]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }    
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
