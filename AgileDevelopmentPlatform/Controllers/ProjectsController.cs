@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using AgileDevelopmentPlatform.Models;
+using Microsoft.AspNet.Identity;
 using AutoMapper;
 
 namespace AgileDevelopmentPlatform.Controllers
@@ -47,11 +45,15 @@ namespace AgileDevelopmentPlatform.Controllers
             ProjectModel projectModel=new ProjectModel()
             {
                 Id = project.Id,
-                Name =project.Name
+                Name =project.Name,
+                OwnerId = project.OwnerId
+                
             };
 
             if (projectModel.Id == 0)
             {
+                var userId = HttpContext.User.Identity.GetUserId();
+                projectModel.OwnerId = userId;
                 _dataManager.AddProject(projectModel);
                 _dataManager.SaveChanges();
 
@@ -67,7 +69,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult EditProject(int id)
         {
-             ;
+             
             var project = _dataManager.FindProjectById(id);
             if (project == null)
             {
@@ -186,6 +188,7 @@ namespace AgileDevelopmentPlatform.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddNewTask(NewTaskViewModel taskView)
         {
+
             //TODO: see how to make the client side validation work.
             //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
             if (!ModelState.IsValid)
@@ -194,15 +197,19 @@ namespace AgileDevelopmentPlatform.Controllers
             }
 
             //TODO update the behavior so that the responconsible user can be null at creation time and the Initiator shall be the logged user
+            var userId = HttpContext.User.Identity.GetUserId();
+
+           var userModel= _dataManager.FindUserByUserId(userId);
             TaskModel model=new TaskModel()
             {
                 Id=0,
                 Name = taskView.Name,
-                TaskInitiatorId = 1,
-                ResponsibleUserId = 1,
+                TaskInitiatorId = userModel.Id,
+                ResponsibleUserId = userModel.Id,
                 Description = taskView.Description,
                 ProjectId = taskView.ProjectId,
-                Status = "Open"
+                Priority = taskView.Priority,
+                Status = TaskState.Open
             };
 
             _dataManager.AddTask(model);
@@ -220,8 +227,7 @@ namespace AgileDevelopmentPlatform.Controllers
             }
 
             TaskModel taskModel=Mapper.Map<TaskModel>(taskView);
-            _dataManager.UpdateTask(taskModel);
-            
+            _dataManager.UpdateTask(taskModel);            
             _dataManager.SaveChanges();
 
 
@@ -239,16 +245,14 @@ namespace AgileDevelopmentPlatform.Controllers
                 return HttpNotFound();
             }
 
+
+            //TODO: Return only the users that have access to the project.
             List<UserSelectViewModel> userList =new List<UserSelectViewModel>();
             foreach (var userModel in _dataManager.UserList)
             {
-                UserSelectViewModel user=new UserSelectViewModel()
-                {
-                    UserId = userModel.Id,
-                    UserName = userModel.UserName
-                };
-                userList.Add(user);
-                
+
+              var selectUser=  Mapper.Map<UserSelectViewModel>(userModel);
+                userList.Add(selectUser);               
             }
 
 

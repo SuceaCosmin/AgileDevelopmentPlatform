@@ -171,10 +171,9 @@ namespace AgileDevelopmentPlatform.Models
             }
         }
 
-        public UserModel FindUserByUserName(string userName)
+        public UserModel FindUserByUserId(string userId)
         {
-            //TODO update filter to find by name not  email after the name is added
-            var sprint = _databaseEntities.Users.SingleOrDefault(user=>user.Email.Equals(userName));
+            var sprint = _databaseEntities.Users.SingleOrDefault(user=>user.Id.Equals(userId));
             if (sprint != null)
             {
                 return Mapper.Map<UserModel>(sprint);

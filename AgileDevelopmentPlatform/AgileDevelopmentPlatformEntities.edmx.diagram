@@ -14,6 +14,7 @@
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_Sprint" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_User" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_User1" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Project_User" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

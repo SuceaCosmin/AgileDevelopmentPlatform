@@ -60,13 +60,15 @@ namespace AgileDevelopmentPlatform.Models
 
         public int? SprintId { get; set; }
 
-        public int TaskInitiatorId { get; set; }
+        public string TaskInitiatorId { get; set; }
+
+        public string ResponsibleUserId { get; set; }
 
         public string Status { get; set; }
 
         public string Priority { get; set; }    
 
-        public int ResponsibleUserId { get; set; }
+
 
     }
 
@@ -86,6 +88,9 @@ namespace AgileDevelopmentPlatform.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public string OwnerId { get; set; }
+    
 
         public List<SprintModel> SprintList { get; set; }
 

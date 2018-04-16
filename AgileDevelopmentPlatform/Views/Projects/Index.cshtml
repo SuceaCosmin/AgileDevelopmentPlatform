@@ -37,22 +37,23 @@ else
     <p>No projects have  been created yet.</p>
 }
 
+@section scripts{
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var table = $("#projects").DataTable();
 
             $("#projects").on("click",
                 ".js-delete",
-                function () {
+                function() {
 
                     var button = $(this);
                     bootbox.confirm("Are you sure you want to delete the selected project?",
-                        function (result) {
+                        function(result) {
                             if (result) {
                                 $.ajax({
                                     url: "/api/projects/" + button.attr("data-project-id"),
                                     method: "DELETE",
-                                    success: function () {
+                                    success: function() {
                                         table.row(button.parents("tr").remove()).draw();
                                         window.location.reload(true);
 
@@ -66,4 +67,5 @@ else
                 });
         });
     </script>
+}
 

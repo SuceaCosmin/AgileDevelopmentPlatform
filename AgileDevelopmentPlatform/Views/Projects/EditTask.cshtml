@@ -24,7 +24,7 @@
                 
                 <div class="form-group">
                     @Html.LabelFor(model => model.TaskInitiatorId)
-                    @Html.DropDownListFor(model => model.TaskInitiatorId,new SelectList(Model.UserList,"UserId","UserName"),  new { @disabled="true", @class = "form-control" })
+                    @Html.DropDownListFor(model => model.TaskInitiatorId,new SelectList(Model.UserList,"Id","UserName"),  new { @disabled="true", @class = "form-control" })
                 </div>
 
                 <div class="form-group">
@@ -35,7 +35,7 @@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.ResponsibleUserId)
-                    @Html.DropDownListFor(model => model.ResponsibleUserId, new SelectList(Model.UserList,"UserId","UserName"),"",  new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.ResponsibleUserId, new SelectList(Model.UserList,"Id","UserName"),"",  new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.ResponsibleUserId, "", new { @class = "text-danger" })
 
                 </div>

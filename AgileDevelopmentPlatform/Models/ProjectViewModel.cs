@@ -12,6 +12,8 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Name { get; set; }
 
+        public string OwnerId { get; set; }
+
         public IEnumerable<SprintViewModel> SprintList { get; set; }
 
         public IEnumerable<ReferenceTaskViewModel> TaskList { get; set; }
@@ -24,6 +26,8 @@ namespace AgileDevelopmentPlatform.Models
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
+
+        public string OwnerId { get; set; }
     }
 
     public class NewTaskViewModel
@@ -49,7 +53,7 @@ namespace AgileDevelopmentPlatform.Models
     public class EditTaskViewModel
     {
 
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -57,9 +61,9 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Description { get; set; }
 
-        public int TaskInitiatorId { get; set; }
+        public string TaskInitiatorId { get; set; }
 
-        public int ResponsibleUserId { get; set; }
+        public string  ResponsibleUserId { get; set; }
 
 
         public IEnumerable<UserSelectViewModel> UserList { get; set; }
