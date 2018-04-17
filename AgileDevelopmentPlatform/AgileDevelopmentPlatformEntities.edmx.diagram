@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Project" Width="1.5" PointX="3.75" PointY="0.5" />
         <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Sprint" Width="1.5" PointX="6.25" PointY="0.5" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Sprint_Project" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.User" Width="1.5" PointX="1.125" PointY="3" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.User" Width="2" PointX="1.125" PointY="3" />
         <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Task" Width="1.5" PointX="6.25" PointY="3.125" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_Sprint" />

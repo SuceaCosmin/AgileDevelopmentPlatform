@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace AgileDevelopmentPlatform.Models
 {
@@ -61,11 +62,10 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Description { get; set; }
 
+        [Required]
         public string TaskInitiatorId { get; set; }
 
         public string  ResponsibleUserId { get; set; }
-
-
         public IEnumerable<UserSelectViewModel> UserList { get; set; }
 
         [Required]
@@ -84,5 +84,15 @@ namespace AgileDevelopmentPlatform.Models
         public string Name { get; set; }
 
         public int Id { get; set; }
+    }
+
+    public class AssignTaskToSprintViewModel
+    {
+        [Required]
+        public int TaskId { get; set; }
+
+        [Required]
+        public int SprintId { get; set; }
+        public IEnumerable<SelectListItem> SprintList { get; set; }
     }
 }

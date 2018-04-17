@@ -172,8 +172,6 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult NewTask(int projectId)
         {
-
-
             ViewBag.PriorityList = TaskPriority.List;
             NewTaskViewModel viewModel= new NewTaskViewModel()
             {
@@ -223,6 +221,17 @@ namespace AgileDevelopmentPlatform.Controllers
         {
             if (!ModelState.IsValid)
             {
+                List<UserSelectViewModel> userList = new List<UserSelectViewModel>();
+                foreach (var userModel in _dataManager.UserList)
+                {
+
+                    var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
+                    userList.Add(selectUser);
+                }
+                taskView.UserList = userList;
+                taskView.PriorityType = TaskPriority.List;
+                taskView.TaskStateList = TaskState.List;
+
                 return PartialView("EditTask", taskView);
             }
 
@@ -232,7 +241,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
 
             //TODO remove hardcoded id and redirect to current project
-            return RedirectToAction("ViewProject", "Projects", new { Id = 8 });
+            return RedirectToAction("ViewProject", "Projects", new { Id = taskModel.ProjectId });
         }
 
         public ActionResult EditTask(int taskId)
@@ -263,6 +272,73 @@ namespace AgileDevelopmentPlatform.Controllers
 
             return  PartialView("EditTask", model);
         }
+
+        public ActionResult AssignTaskToSprint(int taskId)
+        {
+            var task = _dataManager.FindTaskById(taskId);
+
+            if (task == null)
+            {
+                return HttpNotFound();
+            }
+
+            var project = _dataManager.FindProjectById(task.ProjectId);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<SelectListItem> sprintList= new List<SelectListItem>();
+            sprintList.Add(new SelectListItem()
+            {
+                Text = "",
+                Value = "0"
+            });
+            project.SprintList.ForEach(sprint =>
+            {
+                sprintList.Add(new SelectListItem()
+                {
+                   Text = sprint.Name,
+                    Value = sprint.Id.ToString()
+                });
+            });
+
+            AssignTaskToSprintViewModel model = new AssignTaskToSprintViewModel()
+            {
+                TaskId = taskId,
+                SprintList = sprintList
+            };
+
+            return PartialView("AssignTaskToSprint", model);
+        }
+
+        public ActionResult SaveTaskAssignation(AssignTaskToSprintViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                //TODO read the sprints
+                return PartialView("AssignTaskToSprint", model);
+            }
+
+
+            var task = _dataManager.FindTaskById(model.TaskId);
+
+            if (model.SprintId == 0)
+            {
+              return RedirectToAction("ViewProject", "Projects", new { Id = task.ProjectId });
+            }
+
+
+            task.SprintId = model.SprintId;
+            _dataManager.UpdateTask(task);
+            _dataManager.SaveChanges();
+
+
+            return RedirectToAction("ViewProject", "Projects", new { Id = task.ProjectId });
+        }
+
+
+
 
         public ActionResult NewSprint(int projectId)
         {

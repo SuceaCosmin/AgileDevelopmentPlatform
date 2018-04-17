@@ -1,0 +1,24 @@
+﻿
+@model AgileDevelopmentPlatform.Models.AssignTaskToSprintViewModel
+
+@using (Html.BeginForm("SaveTaskAssignation", "Projects"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3>Move task</h3>
+        </div>
+        <div class="modal-body">
+            @Html.LabelFor(m=>m.SprintId,"Move to sprint:")
+            @Html.DropDownListFor(m=>m.SprintId,new SelectList(Model.SprintList,"Value","Text"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m=>m.SprintId)
+            @Html.HiddenFor(m=>m.TaskId)
+        </div>  
+        <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button id="#btnSubmit" class="btn btn-success">Submit</button>
+        </div>
+    </div>
+}

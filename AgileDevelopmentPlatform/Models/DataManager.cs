@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 
 namespace AgileDevelopmentPlatform.Models
 {
-    public class DataManager
+    public class DataManager 
     {
         private readonly AgileDevelopmentDatabaseEntities _databaseEntities;
 
@@ -195,5 +196,7 @@ namespace AgileDevelopmentPlatform.Models
             Sprint sprint = Mapper.Map<Sprint>(sprintModel);
             _databaseEntities.Sprints.Add(sprint);
         }
+
+     
     }
 }
