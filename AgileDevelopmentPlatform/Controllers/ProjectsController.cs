@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using AgileDevelopmentPlatform.Models;
+using AgileDevelopmentPlatform.ViewModel;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
 
@@ -197,7 +198,7 @@ namespace AgileDevelopmentPlatform.Controllers
             //TODO update the behavior so that the responconsible user can be null at creation time and the Initiator shall be the logged user
             var userId = HttpContext.User.Identity.GetUserId();
 
-           var userModel= _dataManager.FindUserByUserId(userId);
+            var userModel= _dataManager.FindUserByUserId(userId);
             TaskModel model=new TaskModel()
             {
                 Id=0,

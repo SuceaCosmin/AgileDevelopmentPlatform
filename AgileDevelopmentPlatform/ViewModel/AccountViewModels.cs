@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AgileDevelopmentPlatform.Models
+namespace AgileDevelopmentPlatform.ViewModel
 {
     public class ExternalLoginConfirmationViewModel
     {

@@ -249,16 +249,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="ViewModel\AccountViewModels.cs" />
     <Compile Include="Models\DataManager.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="ViewModel\ManageViewModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
-    <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="ViewModel\ProjectViewModel.cs" />
     <Compile Include="Models\SprintModel.cs" />
-    <Compile Include="Models\SprintViewModel.cs" />
+    <Compile Include="ViewModel\SprintViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\UserSelectViewModel.cs" />
+    <Compile Include="ViewModel\UserSelectViewModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>

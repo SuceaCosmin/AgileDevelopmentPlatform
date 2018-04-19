@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace AgileDevelopmentPlatform.Models
+namespace AgileDevelopmentPlatform.ViewModel
 {
     public class IndexViewModel
     {

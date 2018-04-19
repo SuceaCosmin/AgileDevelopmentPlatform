@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
-namespace AgileDevelopmentPlatform.Models
+namespace AgileDevelopmentPlatform.ViewModel
 {
     public class SprintViewModel
     {
