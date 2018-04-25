@@ -185,6 +185,42 @@ namespace AgileDevelopmentPlatform.Models
 
         #endregion
 
+        #region UserAccess region
+
+        public List<UserAccessModel> GetUserAccessOnProject(int projectId)
+        {
+            List<UserAccessModel> userAccessList= new List<UserAccessModel>();
+
+            var projectAccess = _databaseEntities.UserAccesses.Where(access => access.ProjectId == projectId);
+            foreach (UserAccess access in projectAccess)
+            {
+                userAccessList.Add(Mapper.Map<UserAccessModel>(access));
+            }
+
+            return userAccessList;
+        }
+
+        public void AddUserAccessToProject(UserAccessModel model)
+        {
+            UserAccess access = Mapper.Map<UserAccess>(model);
+            _databaseEntities.UserAccesses.Add(access);
+        }
+
+
+        public bool RemoveUserAccessOnProject(string userId, int projectId)
+        {
+           var userAccess= _databaseEntities.UserAccesses.SingleOrDefault(access =>
+                access.ProjectId == projectId && access.UserId.Equals(userId));
+            if (userAccess != null)
+            {
+                _databaseEntities.UserAccesses.Remove(userAccess);
+                return true;
+            }
+
+            return false;
+        }
+        #endregion
+
         public void SaveChanges()
         {
             _databaseEntities.SaveChanges();
@@ -197,6 +233,6 @@ namespace AgileDevelopmentPlatform.Models
             _databaseEntities.Sprints.Add(sprint);
         }
 
-     
+
     }
 }

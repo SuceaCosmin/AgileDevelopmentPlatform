@@ -1,7 +1,7 @@
-﻿
-@using AgileDevelopmentPlatform.Models
-@using AgileDevelopmentPlatform.ViewModel
-@model AgileDevelopmentPlatform.ViewModel.ProjectViewModel
+﻿@using AgileDevelopmentPlatform.ViewModel
+@using Microsoft.AspNet.Identity
+@model ProjectViewModel
+
 @{
     ViewBag.Title = "ViewProject";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,6 +13,12 @@
 <div>
     <div>
         <H2>Project @Model.Name</H2>
+        @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
+        {
+
+            @Html.ActionLink("Edit user access on project", "EditProjectAccess", "Projects", new { id = Model.Id }, null)
+           
+        }
         <button class="button btn-success hover" onclick="CreateNewSprint(@Model.Id)">Create sprint</button>
     </div>
 

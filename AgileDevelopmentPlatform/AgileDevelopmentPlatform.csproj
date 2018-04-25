@@ -241,6 +241,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\ProjectsController.cs" />
     <Compile Include="Controllers\Api\TasksController.cs" />
+    <Compile Include="Controllers\Api\UserAccessController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
@@ -249,15 +250,21 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\UserAccessModel.cs" />
+    <Compile Include="UserAccess.cs">
+      <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AccountViewModels.cs" />
     <Compile Include="Models\DataManager.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="ViewModel\ManageViewModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
+    <Compile Include="ViewModel\ProjectAccessViewModel.cs" />
     <Compile Include="ViewModel\ProjectViewModel.cs" />
     <Compile Include="Models\SprintModel.cs" />
     <Compile Include="ViewModel\SprintViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="ViewModel\ProjectUserAccessViewModel.cs" />
     <Compile Include="ViewModel\UserSelectViewModel.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
@@ -539,6 +546,8 @@
     <Content Include="Views\Projects\EditTask.cshtml" />
     <Content Include="Views\Projects\NewSprint.cshtml" />
     <Content Include="Views\Projects\AssignTaskToSprint.cshtml" />
+    <Content Include="Views\Projects\AccessManagement.cshtml" />
+    <Content Include="Views\Projects\AddUserToProject.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

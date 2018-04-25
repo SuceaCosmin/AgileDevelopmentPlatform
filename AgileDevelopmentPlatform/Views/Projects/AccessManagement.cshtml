@@ -1,0 +1,83 @@
+﻿
+@using AgileDevelopmentPlatform.ViewModel
+@model ProjectAccessViewModel
+
+
+
+<h2>AccessManagement</h2>
+<h2>@Model.ProjectName user access</h2>
+
+@if (@Model.GrantedAccessList.Any())
+{
+    <div class="row">
+        <div class=" col-md-10"></div>
+        <div class=" col-md-2"><button class="button btn-success hover" onclick="AddNewUser()">Add user</button></div>
+
+    </div>
+    <table id="UserAccessTable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (UserSelectViewModel user in Model.GrantedAccessList)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td> <button data-project-id="@user.Id" class="btn-danger" onclick="RemoveUser()">Remove</button></td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <p>No users have been added to the project yet!</p>
+}
+
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content" id="newTaskCreationBody">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3>New task</h3>
+            </div>
+            <div class="modal-body">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval");
+    @Scripts.Render("~/bundles/lib");
+}
+<script>
+
+    function AddNewUser() {
+
+        $("#newTaskCreationBody").load('@Url.Action("AddUserToProject", "Projects", new {projectId = @Model.ProjectId})',
+            function() {
+                $("#modal").modal("show");
+            });
+
+
+    };
+    function RemoveUser() {
+        var table = $("#UserAccessTable").DataTable();
+        
+        var button = $(this);
+        bootbox.confirm("Are you sure you want to remove the selected user?",
+            function(result) {
+                if (result) {
+
+                }
+            });
+    }
+</script>
+
+

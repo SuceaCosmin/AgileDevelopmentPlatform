@@ -5,16 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7e6435b40d8143bcaa41cb87e8d9f7de" Name="Diagram1" ZoomLevel="93">
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Project" Width="1.5" PointX="3.75" PointY="0.5" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Sprint" Width="1.5" PointX="6.25" PointY="0.5" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Project" Width="1.5" PointX="8.25" PointY="0.625" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Sprint" Width="1.5" PointX="11.375" PointY="0.75" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Sprint_Project" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.User" Width="2" PointX="1.125" PointY="3" />
-        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Task" Width="1.5" PointX="6.25" PointY="3.125" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.User" Width="2" PointX="4.75" PointY="3.25" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.Task" Width="1.875" PointX="11.25" PointY="3.75" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_TaskTable_ProjectTable" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_Sprint" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_User" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_User1" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Project_User" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.UserAccess" Width="1.5" PointX="4.875" PointY="0.625" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccess_Project" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccess_User" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

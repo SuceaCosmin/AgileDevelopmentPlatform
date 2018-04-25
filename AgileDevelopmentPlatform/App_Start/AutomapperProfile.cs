@@ -40,6 +40,10 @@ namespace AgileDevelopmentPlatform
 
             CreateMap<TaskModel, EditTaskViewModel>();
             CreateMap<EditTaskViewModel, TaskModel>();
+
+            CreateMap<UserAccessModel, UserAccess>();
+            CreateMap<UserAccess, UserAccessModel>();
+
         }
     }
 }

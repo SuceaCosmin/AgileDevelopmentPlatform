@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AgileDevelopmentPlatform.Models;
 using AgileDevelopmentPlatform.ViewModel;
@@ -17,8 +18,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ProjectsController()
         {
-            _dataManager=new DataManager();
-         
+            _dataManager=new DataManager();   
         }
 
         // GET: Projects
@@ -28,9 +28,11 @@ namespace AgileDevelopmentPlatform.Controllers
             return View(_dataManager.ProjectList);
         }
 
+        #region Project
+
         public ActionResult NewProject()
         {
-            ProjectCreateOrEditViewModel viewModel =new ProjectCreateOrEditViewModel();
+            ProjectCreateOrEditViewModel viewModel = new ProjectCreateOrEditViewModel();
             return View("AddProject", viewModel);
         }
 
@@ -43,12 +45,12 @@ namespace AgileDevelopmentPlatform.Controllers
                 return View("AddProject", project);
             }
 
-            ProjectModel projectModel=new ProjectModel()
+            ProjectModel projectModel = new ProjectModel()
             {
                 Id = project.Id,
-                Name =project.Name,
+                Name = project.Name,
                 OwnerId = project.OwnerId
-                
+
             };
 
             if (projectModel.Id == 0)
@@ -59,18 +61,20 @@ namespace AgileDevelopmentPlatform.Controllers
                 _dataManager.SaveChanges();
 
 
-            }else{
+            }
+            else
+            {
                 _dataManager.UpdateProject(projectModel);
                 _dataManager.SaveChanges();
             }
-   
+
 
             return RedirectToAction("Index", "Projects");
         }
 
         public ActionResult EditProject(int id)
         {
-             
+
             var project = _dataManager.FindProjectById(id);
             if (project == null)
             {
@@ -79,23 +83,23 @@ namespace AgileDevelopmentPlatform.Controllers
             ProjectCreateOrEditViewModel viewViewModel = new ProjectCreateOrEditViewModel()
             {
                 Id = project.Id,
-                Name= project.Name
+                Name = project.Name
             };
 
             return View("AddProject", viewViewModel);
-           
+
         }
 
         public ActionResult ViewProject(int id)
         {
             var project = _dataManager.FindProjectById(id);
 
-             
+
             if (project == null)
             {
                 return HttpNotFound();
             }
-            List<ReferenceTaskViewModel> taskList= new List<ReferenceTaskViewModel>();
+            List<ReferenceTaskViewModel> taskList = new List<ReferenceTaskViewModel>();
             foreach (var taskModel in project.TaskList)
             {
                 if (taskModel.SprintId == null || taskModel.SprintId == 0)
@@ -111,7 +115,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
             }
 
-            List<SprintViewModel> sprintList=new List<SprintViewModel>();
+            List<SprintViewModel> sprintList = new List<SprintViewModel>();
             foreach (var sprintModel in project.SprintList)
             {
                 SprintViewModel model = Mapper.Map<SprintViewModel>(sprintModel);
@@ -144,14 +148,16 @@ namespace AgileDevelopmentPlatform.Controllers
                         }
 
                     });
-                }catch{
-                  Console.WriteLine("Failed to calculate  sprint task status for project "+project.Name);
+                }
+                catch
+                {
+                    Console.WriteLine("Failed to calculate  sprint task status for project " + project.Name);
                 }
 
                 model.OpenTasks = openTasks;
                 model.WorkingTasks = workingTask;
                 model.FinishedTasks = finishedTasks;
-                
+
                 sprintList.Add(model);
 
             }
@@ -161,117 +167,133 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 Name = project.Name,
                 Id = project.Id,
+                OwnerId = project.OwnerId,
                 TaskList = taskList,
                 SprintList = sprintList
-                
+
             };
 
 
             return View("ViewProject", viewModel);
-          
+
         }
 
-        public ActionResult NewTask(int projectId)
+        public ActionResult EditProjectAccess(int id)
         {
-            ViewBag.PriorityList = TaskPriority.List;
-            NewTaskViewModel viewModel= new NewTaskViewModel()
-            {
-                ProjectId =projectId,
-                PriorityType = TaskPriority.List
-              
-                
-            };
-            return PartialView("NewTask", viewModel);
-        }
+            var project = _dataManager.FindProjectById(id);
 
-        [ValidateAntiForgeryToken]
-        public ActionResult AddNewTask(NewTaskViewModel taskView)
-        {
-
-            //TODO: see how to make the client side validation work.
-            //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
-            if (!ModelState.IsValid)
-            {
-                return PartialView("NewTask", taskView);
-            }
-
-            //TODO update the behavior so that the responconsible user can be null at creation time and the Initiator shall be the logged user
-            var userId = HttpContext.User.Identity.GetUserId();
-
-            var userModel= _dataManager.FindUserByUserId(userId);
-            TaskModel model=new TaskModel()
-            {
-                Id=0,
-                Name = taskView.Name,
-                TaskInitiatorId = userModel.Id,
-                ResponsibleUserId = userModel.Id,
-                Description = taskView.Description,
-                ProjectId = taskView.ProjectId,
-                Priority = taskView.Priority,
-                Status = TaskState.Open
-            };
-
-            _dataManager.AddTask(model);
-            _dataManager.SaveChanges();
-
-            return RedirectToAction("ViewProject", "Projects",new{Id=taskView.ProjectId});
-        }
-
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateTask(EditTaskViewModel taskView)
-        {
-            if (!ModelState.IsValid)
-            {
-                List<UserSelectViewModel> userList = new List<UserSelectViewModel>();
-                foreach (var userModel in _dataManager.UserList)
-                {
-
-                    var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
-                    userList.Add(selectUser);
-                }
-                taskView.UserList = userList;
-                taskView.PriorityType = TaskPriority.List;
-                taskView.TaskStateList = TaskState.List;
-
-                return PartialView("EditTask", taskView);
-            }
-
-            TaskModel taskModel=Mapper.Map<TaskModel>(taskView);
-            _dataManager.UpdateTask(taskModel);            
-            _dataManager.SaveChanges();
-
-
-            //TODO remove hardcoded id and redirect to current project
-            return RedirectToAction("ViewProject", "Projects", new { Id = taskModel.ProjectId });
-        }
-
-        public ActionResult EditTask(int taskId)
-        {
-           
-            TaskModel task= _dataManager.FindTaskById(taskId);
-
-            if (task == null)
+            if (project == null)
             {
                 return HttpNotFound();
             }
 
+            var userAccessList=  _dataManager.GetUserAccessOnProject(id);
 
-            //TODO: Return only the users that have access to the project.
-            List<UserSelectViewModel> userList =new List<UserSelectViewModel>();
-            foreach (var userModel in _dataManager.UserList)
+            var userList = _dataManager.UserList;
+
+           List<UserSelectViewModel> usersWithAccess= new List<UserSelectViewModel>();
+
+           userAccessList.ForEach(userAccess =>
+           {
+               var user = userList.Find(model => model.Id.Equals(userAccess.UserId));
+               if (user != null)
+               {
+                   usersWithAccess.Add(Mapper.Map<UserSelectViewModel>(user));
+               }
+           });
+
+           ProjectAccessViewModel projectAccessViewModel= new ProjectAccessViewModel()
+           {
+               ProjectName = project.Name,
+               ProjectId = project.Id,
+               GrantedAccessList = usersWithAccess
+           };
+
+            return View("AccessManagement", projectAccessViewModel);
+        }
+
+        public ActionResult AddUserToProject(int projectId)
+        {
+
+           var currentProject= _dataManager.ProjectList.SingleOrDefault(project => project.Id == projectId);
+            if (currentProject == null)
             {
-
-              var selectUser=  Mapper.Map<UserSelectViewModel>(userModel);
-                userList.Add(selectUser);               
+                return HttpNotFound();
             }
 
+           var userAccess= _dataManager.GetUserAccessOnProject(projectId);
 
-            EditTaskViewModel model = Mapper.Map<EditTaskViewModel>(task);
-            model.UserList = userList;
-            model.PriorityType = TaskPriority.List;
-            model.TaskStateList = TaskState.List;
+            List<UserSelectViewModel> selectableUsers= new List<UserSelectViewModel>();
+            selectableUsers.Add(new UserSelectViewModel()
+            {
+                Id = "",
+                UserName = "<none>"
+            });
 
-            return  PartialView("EditTask", model);
+            _dataManager.UserList.ForEach(user =>
+            {
+                if (userAccess.Find(access => access.UserId.Equals(user.Id)) == null)
+                {
+                    selectableUsers.Add(Mapper.Map<UserSelectViewModel>(user));
+                }
+            });
+            ProjectUserAccessViewModel model =new ProjectUserAccessViewModel()
+            {
+                Id = 0,
+                ProjectId = projectId,
+                UserList = selectableUsers
+            };
+            return PartialView("AddUserToProject", model);
+        }
+
+        public ActionResult GrantUserAccessToProject(ProjectUserAccessViewModel model)
+        {
+
+            if (model.UserId!=null && !model.UserId.Equals(""))
+            {
+                UserAccessModel userAccessModel = new UserAccessModel()
+                {
+                    Id = model.Id,
+                    ProjectId = model.ProjectId,
+                    UserId = model.UserId
+                };
+                _dataManager.AddUserAccessToProject(userAccessModel);
+                _dataManager.SaveChanges();
+            }
+
+            return RedirectToAction("EditProjectAccess", "Projects", new { Id = model.ProjectId });
+
+
+        }
+
+        #endregion
+
+
+
+        #region Sprint
+
+        public ActionResult NewSprint(int projectId)
+        {
+            NewSprintViewModel model = new NewSprintViewModel()
+            {
+                ProjectId = projectId
+            };
+            return PartialView("NewSprint", model);
+        }
+
+        public ActionResult SaveSprint(NewSprintViewModel sprintViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("NewSprint", sprintViewModel);
+            }
+
+            SprintModel sprintModel = Mapper.Map<SprintModel>(sprintViewModel);
+
+            _dataManager.AddSprint(sprintModel);
+            _dataManager.SaveChanges();
+
+            return RedirectToAction("ViewProject", "Projects", new { Id = sprintViewModel.ProjectId });
         }
 
         public ActionResult AssignTaskToSprint(int taskId)
@@ -289,7 +311,7 @@ namespace AgileDevelopmentPlatform.Controllers
                 return HttpNotFound();
             }
 
-            List<SelectListItem> sprintList= new List<SelectListItem>();
+            List<SelectListItem> sprintList = new List<SelectListItem>();
             sprintList.Add(new SelectListItem()
             {
                 Text = "",
@@ -299,7 +321,7 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 sprintList.Add(new SelectListItem()
                 {
-                   Text = sprint.Name,
+                    Text = sprint.Name,
                     Value = sprint.Id.ToString()
                 });
             });
@@ -326,7 +348,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
             if (model.SprintId == 0)
             {
-              return RedirectToAction("ViewProject", "Projects", new { Id = task.ProjectId });
+                return RedirectToAction("ViewProject", "Projects", new { Id = task.ProjectId });
             }
 
 
@@ -338,31 +360,117 @@ namespace AgileDevelopmentPlatform.Controllers
             return RedirectToAction("ViewProject", "Projects", new { Id = task.ProjectId });
         }
 
+        #endregion
+
+        #region Task
 
 
-
-        public ActionResult NewSprint(int projectId)
+        public ActionResult NewTask(int projectId)
         {
-            NewSprintViewModel model= new NewSprintViewModel()
+            ViewBag.PriorityList = TaskPriority.List;
+            NewTaskViewModel viewModel = new NewTaskViewModel()
             {
-                ProjectId =projectId
+                ProjectId = projectId,
+                PriorityType = TaskPriority.List
+
+
             };
-            return PartialView("NewSprint", model);
+            return PartialView("NewTask", viewModel);
         }
 
-        public ActionResult SaveSprint(NewSprintViewModel sprintViewModel)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddNewTask(NewTaskViewModel taskView)
         {
-            if (!ModelState.IsValid){
-                return PartialView("NewSprint", sprintViewModel);
+
+            //TODO: see how to make the client side validation work.
+            //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
+            if (!ModelState.IsValid)
+            {
+                return PartialView("NewTask", taskView);
             }
 
-            SprintModel sprintModel = Mapper.Map<SprintModel>(sprintViewModel);
+            //TODO update the behavior so that the responconsible user can be null at creation time and the Initiator shall be the logged user
+            var userId = HttpContext.User.Identity.GetUserId();
 
-            _dataManager.AddSprint(sprintModel);
+            var userModel = _dataManager.FindUserByUserId(userId);
+            TaskModel model = new TaskModel()
+            {
+                Id = 0,
+                Name = taskView.Name,
+                TaskInitiatorId = userModel.Id,
+                ResponsibleUserId = userModel.Id,
+                Description = taskView.Description,
+                ProjectId = taskView.ProjectId,
+                Priority = taskView.Priority,
+                Status = TaskState.Open
+            };
+
+            _dataManager.AddTask(model);
             _dataManager.SaveChanges();
 
-            return RedirectToAction("ViewProject", "Projects", new { Id = sprintViewModel.ProjectId });
+            return RedirectToAction("ViewProject", "Projects", new { Id = taskView.ProjectId });
         }
+
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateTask(EditTaskViewModel taskView)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<UserSelectViewModel> userList = new List<UserSelectViewModel>();
+                foreach (var userModel in _dataManager.UserList)
+                {
+
+                    var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
+                    userList.Add(selectUser);
+                }
+                taskView.UserList = userList;
+                taskView.PriorityType = TaskPriority.List;
+                taskView.TaskStateList = TaskState.List;
+
+                return PartialView("EditTask", taskView);
+            }
+
+            TaskModel taskModel = Mapper.Map<TaskModel>(taskView);
+            _dataManager.UpdateTask(taskModel);
+            _dataManager.SaveChanges();
+
+
+            //TODO remove hardcoded id and redirect to current project
+            return RedirectToAction("ViewProject", "Projects", new { Id = taskModel.ProjectId });
+        }
+
+        public ActionResult EditTask(int taskId)
+        {
+
+            TaskModel task = _dataManager.FindTaskById(taskId);
+
+            if (task == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            //TODO: Return only the users that have access to the project.
+            List<UserSelectViewModel> userList = new List<UserSelectViewModel>();
+            foreach (var userModel in _dataManager.UserList)
+            {
+
+                var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
+                userList.Add(selectUser);
+            }
+
+
+            EditTaskViewModel model = Mapper.Map<EditTaskViewModel>(task);
+            model.UserList = userList;
+            model.PriorityType = TaskPriority.List;
+            model.TaskStateList = TaskState.List;
+
+            return PartialView("EditTask", model);
+        }
+
+        #endregion
+
+
 
     }
 }
