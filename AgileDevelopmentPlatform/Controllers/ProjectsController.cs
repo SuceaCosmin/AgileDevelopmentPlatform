@@ -24,6 +24,7 @@ namespace AgileDevelopmentPlatform.Controllers
         // GET: Projects
         public ActionResult Index()
         {
+            //TODO: Only the project owner shall have access to  edit or delete the project.
             var userId = HttpContext.User.Identity.GetUserId();
             var userAccessList=  _dataManager.GetUserAccessOnProjects(userId);
 
@@ -94,6 +95,15 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 return HttpNotFound();
             }
+
+            var userId = HttpContext.User.Identity.GetUserId();
+            var userAccessList = _dataManager.GetUserAccessOnProject(id);
+            if (!userAccessList.Any(access => access.UserId.Equals(userId)))
+            {
+                //TODO: Update to display error that the user does not have access to the project
+                return HttpNotFound();
+            }
+
             ProjectCreateOrEditViewModel viewViewModel = new ProjectCreateOrEditViewModel()
             {
                 Id = project.Id,
@@ -113,6 +123,15 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 return HttpNotFound();
             }
+
+            var userId = HttpContext.User.Identity.GetUserId();
+            var userAccessList = _dataManager.GetUserAccessOnProject(id);
+            if (!userAccessList.Any(access => access.UserId.Equals(userId)))
+            {
+                //TODO: Update to display error that the user does not have access to the project
+                return HttpNotFound();
+            }
+
             List<ReferenceTaskViewModel> taskList = new List<ReferenceTaskViewModel>();
             foreach (var taskModel in project.TaskList)
             {
