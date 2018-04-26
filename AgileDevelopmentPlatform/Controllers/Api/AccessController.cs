@@ -8,11 +8,11 @@ using AgileDevelopmentPlatform.Models;
 
 namespace AgileDevelopmentPlatform.Controllers.Api
 {
-    public class UserAccessController : ApiController
+    public class AccessController : ApiController
     {
         private readonly DataManager _manager;
 
-        public UserAccessController()
+        public AccessController()
         {
             _manager = new DataManager();
         }
@@ -42,6 +42,7 @@ namespace AgileDevelopmentPlatform.Controllers.Api
         }
 
         // DELETE api/<controller>/5
+        [HttpDelete]
         public void Delete(string userId,int projectId)
         {
           bool response=  _manager.RemoveUserAccessOnProject(userId,projectId);
