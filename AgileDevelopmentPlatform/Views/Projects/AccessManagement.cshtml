@@ -10,14 +10,14 @@
 
 <h2>AccessManagement</h2>
 <h2>@Model.ProjectName user access</h2>
+<div class="row">
+    <div class=" col-md-10"></div>
+    <div class=" col-md-2"><button class="button btn-success hover" onclick="AddNewUser()">Add user</button></div>
 
+</div>
 @if (@Model.GrantedAccessList.Any())
 {
-    <div class="row">
-        <div class=" col-md-10"></div>
-        <div class=" col-md-2"><button class="button btn-success hover" onclick="AddNewUser()">Add user</button></div>
 
-    </div>
     <table id="UserAccessTable" class="table table-bordered table-hover">
         <thead>
             <tr>

@@ -187,9 +187,34 @@ namespace AgileDevelopmentPlatform.Models
 
         #region UserAccess region
 
+       
+
+        public void AddUserAccessToProject(UserAccessModel model)
+        {
+            UserAccess access = Mapper.Map<UserAccess>(model);
+            _databaseEntities.UserAccesses.Add(access);
+        }
+
+        public List<UserAccessModel> GetUserAccessOnProjects(string userId)
+        {
+            var accessList=_databaseEntities.UserAccesses.Where(access => access.UserId.Equals(userId)).ToList();
+
+            List<UserAccessModel> userAccessList=new List<UserAccessModel>();
+
+
+                foreach (UserAccess userAccess in accessList)
+                {
+                    userAccessList.Add(Mapper.Map<UserAccessModel>(userAccess));
+                }
+
+            return userAccessList;
+            
+
+        }
+
         public List<UserAccessModel> GetUserAccessOnProject(int projectId)
         {
-            List<UserAccessModel> userAccessList= new List<UserAccessModel>();
+            List<UserAccessModel> userAccessList = new List<UserAccessModel>();
 
             var projectAccess = _databaseEntities.UserAccesses.Where(access => access.ProjectId == projectId);
             foreach (UserAccess access in projectAccess)
@@ -199,13 +224,6 @@ namespace AgileDevelopmentPlatform.Models
 
             return userAccessList;
         }
-
-        public void AddUserAccessToProject(UserAccessModel model)
-        {
-            UserAccess access = Mapper.Map<UserAccess>(model);
-            _databaseEntities.UserAccesses.Add(access);
-        }
-
 
         public bool RemoveUserAccessOnProject(string userId, int projectId)
         {
@@ -219,6 +237,8 @@ namespace AgileDevelopmentPlatform.Models
 
             return false;
         }
+
+
         #endregion
 
         public void SaveChanges()
@@ -234,5 +254,6 @@ namespace AgileDevelopmentPlatform.Models
         }
 
 
+      
     }
 }

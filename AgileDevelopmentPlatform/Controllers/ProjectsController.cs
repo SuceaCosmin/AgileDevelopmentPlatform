@@ -24,8 +24,22 @@ namespace AgileDevelopmentPlatform.Controllers
         // GET: Projects
         public ActionResult Index()
         {
-             
-            return View(_dataManager.ProjectList);
+            var userId = HttpContext.User.Identity.GetUserId();
+            var userAccessList=  _dataManager.GetUserAccessOnProjects(userId);
+
+
+            List<ProjectModel> allowedProjects= new List<ProjectModel>();
+
+            _dataManager.ProjectList.ForEach(project =>
+            {
+                if (project.OwnerId.Equals(userId)||
+                    userAccessList.Any(access => access.ProjectId == project.Id))
+                {
+                    allowedProjects.Add(project);
+                }
+            });
+
+            return View(allowedProjects);
         }
 
         #region Project
