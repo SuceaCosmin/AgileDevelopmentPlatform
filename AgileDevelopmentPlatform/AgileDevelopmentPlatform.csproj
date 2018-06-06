@@ -245,12 +245,17 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="DebugUtilities\ModelStateAttributeChecker.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\TaskModels.cs" />
     <Compile Include="Models\UserAccessModel.cs" />
+    <Compile Include="TaskDificultyLevel.cs">
+      <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserAccess.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>
@@ -259,13 +264,12 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="ViewModel\ManageViewModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
-    <Compile Include="ViewModel\ProjectAccessViewModel.cs" />
-    <Compile Include="ViewModel\ProjectViewModel.cs" />
+    <Compile Include="ViewModel\ProjectViewModels.cs" />
     <Compile Include="Models\SprintModel.cs" />
-    <Compile Include="ViewModel\SprintViewModel.cs" />
+    <Compile Include="ViewModel\SprintViewModels.cs" />
     <Compile Include="Models\UserModel.cs" />
-    <Compile Include="ViewModel\ProjectUserAccessViewModel.cs" />
-    <Compile Include="ViewModel\UserSelectViewModel.cs" />
+    <Compile Include="ViewModel\TaskDificultyViewModel.cs" />
+    <Compile Include="ViewModel\TaskViewModels.cs" />
     <Compile Include="Project.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>
@@ -280,6 +284,7 @@
     <Compile Include="User.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\UserViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AgileDevelopmentPlatformEntities.Context.tt">

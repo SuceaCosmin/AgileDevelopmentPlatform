@@ -38,8 +38,18 @@ namespace AgileDevelopmentPlatform
             CreateMap<UserModel, User>();
             CreateMap<UserModel, UserSelectViewModel>();
 
-            CreateMap<TaskModel, EditTaskViewModel>();
-            CreateMap<EditTaskViewModel, TaskModel>();
+            CreateMap<TaskModel, EditTaskViewModel>()
+                .ForMember(model => model.TaskDificulty, opt => opt.MapFrom(src => src.TaskDificultyId));
+            CreateMap<EditTaskViewModel, TaskModel>()
+                .ForMember(model => model.TaskDificultyId, opt => opt.MapFrom(src => src.TaskDificulty));
+            
+
+            CreateMap<TaskDificultyLevel, TaskDificulty>();
+            CreateMap<TaskDificulty, TaskDificultyLevel>();
+            CreateMap<TaskDificulty, TaskDificultyViewModel>();
+            CreateMap<TaskDificultyViewModel,TaskDificulty>();
+
+
 
             CreateMap<UserAccessModel, UserAccess>();
             CreateMap<UserAccess, UserAccessModel>();

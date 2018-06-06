@@ -1,33 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace AgileDevelopmentPlatform.ViewModel
 {
-    public class ProjectViewModel
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string OwnerId { get; set; }
-
-        public IEnumerable<SprintViewModel> SprintList { get; set; }
-
-        public IEnumerable<ReferenceTaskViewModel> TaskList { get; set; }
-    }
-
-    public class ProjectCreateOrEditViewModel
-    {
-        public int Id { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        public string Name { get; set; }
-
-        public string OwnerId { get; set; }
-    }
-
     public class NewTaskViewModel
     {
         [Required]
@@ -37,7 +15,8 @@ namespace AgileDevelopmentPlatform.ViewModel
         [Required]
         [StringLength(255)]
         public string Description { get; set; }
-        
+
+        [Display(Name = "Priority")]
         public string Priority { get; set; }
         public IEnumerable<string> PriorityType { get; set; }
 
@@ -45,6 +24,12 @@ namespace AgileDevelopmentPlatform.ViewModel
 
         public int ProjectId { get; set; }
 
+        [Required]
+        [Display(Name = "Dificulty")]
+        public int TaskDificulty { get; set; }
+        public IEnumerable<TaskDificultyViewModel> TaskDificultyList { get; set; }
+
+        public DateTime TaskCreationDate { get; set; }
 
     }
 
@@ -62,7 +47,8 @@ namespace AgileDevelopmentPlatform.ViewModel
         [Required]
         public string TaskInitiatorId { get; set; }
 
-        public string  ResponsibleUserId { get; set; }
+        [Display(Name = "Responsible user")]
+        public string ResponsibleUserId { get; set; }
         public IEnumerable<UserSelectViewModel> UserList { get; set; }
 
         [Required]
@@ -72,6 +58,18 @@ namespace AgileDevelopmentPlatform.ViewModel
         [Required]
         public string Status { get; set; }
         public IEnumerable<string> TaskStateList { get; set; }
+
+        [Display(Name="Work effort(h)")]
+        public int WorkEffort { get; set; }
+
+        [Required]
+        [Display(Name = "Dificulty")]
+        public int TaskDificulty { get; set; }
+        public IEnumerable<TaskDificultyViewModel> TaskDificultyList { get; set; }
+
+        public DateTime TaskCreationDate { get; set; }
+
+        public DateTime TaskCompletionDate { get; set; }
 
 
     }

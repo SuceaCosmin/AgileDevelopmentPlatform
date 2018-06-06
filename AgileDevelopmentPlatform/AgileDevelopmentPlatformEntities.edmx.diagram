@@ -18,6 +18,8 @@
         <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.UserAccess" Width="1.5" PointX="4.875" PointY="0.625" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccess_Project" />
         <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_UserAccess_User" />
+        <EntityTypeShape EntityType="AgileDevelopmentDatabaseModel.TaskDificultyLevel" Width="1.875" PointX="14.875" PointY="6" />
+        <AssociationConnector Association="AgileDevelopmentDatabaseModel.FK_Task_TaskDificultyLevel" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

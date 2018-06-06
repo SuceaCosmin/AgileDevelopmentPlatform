@@ -35,6 +35,18 @@
           <Property Name="SprintId" Type="int" />
           <Property Name="Priority" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="WorkEffort" Type="int" />
+          <Property Name="TaskDificultyId" Type="int" />
+          <Property Name="TaskCreationDate" Type="date" />
+          <Property Name="TaskCompletionDate" Type="date" />
+        </EntityType>
+        <EntityType Name="TaskDificultyLevel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContributionPoints" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -94,6 +106,18 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="SprintId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Task_TaskDificultyLevel">
+          <End Role="TaskDificultyLevel" Type="Self.TaskDificultyLevel" Multiplicity="0..1" />
+          <End Role="Task" Type="Self.Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskDificultyLevel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="TaskDificultyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -161,6 +185,7 @@
           <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sprint" EntityType="Self.Sprint" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaskDificultyLevel" EntityType="Self.TaskDificultyLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAccess" EntityType="Self.UserAccess" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Project_User" Association="Self.FK_Project_User">
@@ -173,6 +198,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Task_Sprint" Association="Self.FK_Task_Sprint">
             <End Role="Sprint" EntitySet="Sprint" />
+            <End Role="Task" EntitySet="Task" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Task_TaskDificultyLevel" Association="Self.FK_Task_TaskDificultyLevel">
+            <End Role="TaskDificultyLevel" EntitySet="TaskDificultyLevel" />
             <End Role="Task" EntitySet="Task" />
           </AssociationSet>
           <AssociationSet Name="FK_Task_User" Association="Self.FK_Task_User">
@@ -237,6 +266,11 @@
           <AssociationSet Name="FK_UserAccess_User" Association="AgileDevelopmentDatabaseModel.FK_UserAccess_User">
             <End Role="User" EntitySet="Users" />
             <End Role="UserAccess" EntitySet="UserAccesses" />
+          </AssociationSet>
+          <EntitySet Name="TaskDificultyLevels" EntityType="AgileDevelopmentDatabaseModel.TaskDificultyLevel" />
+          <AssociationSet Name="FK_Task_TaskDificultyLevel" Association="AgileDevelopmentDatabaseModel.FK_Task_TaskDificultyLevel">
+            <End Role="TaskDificultyLevel" EntitySet="TaskDificultyLevels" />
+            <End Role="Task" EntitySet="Tasks" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Project">
@@ -312,6 +346,11 @@
           <NavigationProperty Name="Sprint" Relationship="AgileDevelopmentDatabaseModel.FK_Task_Sprint" FromRole="Task" ToRole="Sprint" />
           <NavigationProperty Name="User" Relationship="AgileDevelopmentDatabaseModel.FK_Task_User" FromRole="Task" ToRole="User" />
           <NavigationProperty Name="User1" Relationship="AgileDevelopmentDatabaseModel.FK_Task_User1" FromRole="Task" ToRole="User" />
+          <Property Name="WorkEffort" Type="Int32" />
+          <Property Name="TaskDificultyId" Type="Int32" />
+          <Property Name="TaskCreationDate" Type="DateTime" Precision="0" />
+          <Property Name="TaskCompletionDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TaskDificultyLevel" Relationship="AgileDevelopmentDatabaseModel.FK_Task_TaskDificultyLevel" FromRole="Task" ToRole="TaskDificultyLevel" />
         </EntityType>
         <Association Name="FK_TaskTable_ProjectTable">
           <End Type="AgileDevelopmentDatabaseModel.Project" Role="Project" Multiplicity="1" />
@@ -407,6 +446,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TaskDificultyLevel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContributionPoints" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tasks" Relationship="AgileDevelopmentDatabaseModel.FK_Task_TaskDificultyLevel" FromRole="TaskDificultyLevel" ToRole="Task" />
+        </EntityType>
+        <Association Name="FK_Task_TaskDificultyLevel">
+          <End Type="AgileDevelopmentDatabaseModel.TaskDificultyLevel" Role="TaskDificultyLevel" Multiplicity="0..1" />
+          <End Type="AgileDevelopmentDatabaseModel.Task" Role="Task" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaskDificultyLevel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Task">
+              <PropertyRef Name="TaskDificultyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -453,6 +513,10 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="TaskCompletionDate" ColumnName="TaskCompletionDate" />
+                <ScalarProperty Name="TaskCreationDate" ColumnName="TaskCreationDate" />
+                <ScalarProperty Name="TaskDificultyId" ColumnName="TaskDificultyId" />
+                <ScalarProperty Name="WorkEffort" ColumnName="WorkEffort" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="SprintId" ColumnName="SprintId" />
@@ -470,6 +534,15 @@
               <MappingFragment StoreEntitySet="UserAccess">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaskDificultyLevels">
+            <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.TaskDificultyLevel">
+              <MappingFragment StoreEntitySet="TaskDificultyLevel">
+                <ScalarProperty Name="ContributionPoints" ColumnName="ContributionPoints" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

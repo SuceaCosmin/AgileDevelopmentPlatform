@@ -23,10 +23,15 @@ namespace AgileDevelopmentPlatform
         public Nullable<int> SprintId { get; set; }
         public string Priority { get; set; }
         public string Status { get; set; }
+        public Nullable<int> WorkEffort { get; set; }
+        public Nullable<int> TaskDificultyId { get; set; }
+        public Nullable<System.DateTime> TaskCreationDate { get; set; }
+        public Nullable<System.DateTime> TaskCompletionDate { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual Sprint Sprint { get; set; }
         public virtual User User { get; set; }
         public virtual User User1 { get; set; }
+        public virtual TaskDificultyLevel TaskDificultyLevel { get; set; }
     }
 }

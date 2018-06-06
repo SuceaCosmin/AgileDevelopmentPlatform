@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AgileDevelopmentPlatform.DebugUtilities;
 using AgileDevelopmentPlatform.Models;
 using AgileDevelopmentPlatform.ViewModel;
 using Microsoft.AspNet.Identity;
@@ -301,8 +302,6 @@ namespace AgileDevelopmentPlatform.Controllers
 
         #endregion
 
-
-
         #region Sprint
 
         public ActionResult NewSprint(int projectId)
@@ -400,13 +399,24 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult NewTask(int projectId)
         {
-            ViewBag.PriorityList = TaskPriority.List;
+
+             List<TaskDificulty> dificultyLevels = _dataManager.TaskDificultyLevels;
+             List<TaskDificultyViewModel> taskDificultyViewModelList= new List<TaskDificultyViewModel>();
+
+            foreach (var taskDificultyLevel in dificultyLevels)
+            {
+                TaskDificultyViewModel taskDificultyViewModel= Mapper.Map<TaskDificultyViewModel>(taskDificultyLevel);
+                taskDificultyViewModelList.Add(taskDificultyViewModel);
+            }
+
+
+
             NewTaskViewModel viewModel = new NewTaskViewModel()
             {
                 ProjectId = projectId,
-                PriorityType = TaskPriority.List
-
-
+                PriorityType = TaskPriority.List,
+                TaskDificultyList = taskDificultyViewModelList,
+      
             };
             return PartialView("NewTask", viewModel);
         }
@@ -417,11 +427,14 @@ namespace AgileDevelopmentPlatform.Controllers
 
             //TODO: see how to make the client side validation work.
             //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
+
+
             if (!ModelState.IsValid)
             {
                 return PartialView("NewTask", taskView);
             }
 
+        
             //TODO update the behavior so that the responconsible user can be null at creation time and the Initiator shall be the logged user
             var userId = HttpContext.User.Identity.GetUserId();
 
@@ -435,6 +448,10 @@ namespace AgileDevelopmentPlatform.Controllers
                 Description = taskView.Description,
                 ProjectId = taskView.ProjectId,
                 Priority = taskView.Priority,
+                WorkEffort = 0,
+                TaskDificultyId = taskView.TaskDificulty,
+                TaskCreationDate = DateTime.Today,
+                TaskCompletionDate = null,
                 Status = TaskState.Open
             };
 
@@ -464,11 +481,14 @@ namespace AgileDevelopmentPlatform.Controllers
             }
 
             TaskModel taskModel = Mapper.Map<TaskModel>(taskView);
+            if (taskModel.Status.Equals(TaskState.Finished))
+            {
+                taskModel.TaskCompletionDate= DateTime.Today;
+            }
+
             _dataManager.UpdateTask(taskModel);
             _dataManager.SaveChanges();
-
-
-            //TODO remove hardcoded id and redirect to current project
+     
             return RedirectToAction("ViewProject", "Projects", new { Id = taskModel.ProjectId });
         }
 
@@ -491,12 +511,21 @@ namespace AgileDevelopmentPlatform.Controllers
                 var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
                 userList.Add(selectUser);
             }
+            List<TaskDificulty> dificultyLevels = _dataManager.TaskDificultyLevels;
+            List<TaskDificultyViewModel> taskDificultyViewModelList = new List<TaskDificultyViewModel>();
 
+            foreach (var taskDificultyLevel in dificultyLevels)
+            {
+                TaskDificultyViewModel taskDificultyViewModel = Mapper.Map<TaskDificultyViewModel>(taskDificultyLevel);
+                taskDificultyViewModelList.Add(taskDificultyViewModel);
+            }
 
             EditTaskViewModel model = Mapper.Map<EditTaskViewModel>(task);
             model.UserList = userList;
+          
             model.PriorityType = TaskPriority.List;
             model.TaskStateList = TaskState.List;
+            model.TaskDificultyList = taskDificultyViewModelList;
 
             return PartialView("EditTask", model);
         }

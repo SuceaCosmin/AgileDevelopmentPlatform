@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 
@@ -84,19 +83,6 @@ namespace AgileDevelopmentPlatform.Models
 
         #region Task region
 
-        public List<TaskModel> TaskList {
-            get
-            {
-                List<TaskModel> taskList= new List<TaskModel>();
-                foreach (var databaseEntitiesTask in _databaseEntities.Tasks)
-                {
-                    taskList.Add(Mapper.Map<TaskModel>(databaseEntitiesTask));
-                }
-
-                return taskList;
-            }
-        }
-
         public void AddTask(TaskModel taskModel)
         {
             Task task = Mapper.Map<Task>(taskModel);
@@ -148,6 +134,34 @@ namespace AgileDevelopmentPlatform.Models
             return false;
         }
 
+        public List<TaskModel> TaskList
+        {
+            get
+            {
+                List<TaskModel> taskList = new List<TaskModel>();
+                foreach (var databaseEntitiesTask in _databaseEntities.Tasks)
+                {
+                    taskList.Add(Mapper.Map<TaskModel>(databaseEntitiesTask));
+                }
+
+                return taskList;
+            }
+        }
+
+        public List<TaskDificulty> TaskDificultyLevels
+        {
+            get
+            {
+                List<TaskDificulty> taskDificultyLevelList = new List<TaskDificulty>();
+                foreach (var databaseEntitiesTaskDificultyLevel in _databaseEntities.TaskDificultyLevels)
+                {
+                    TaskDificulty dificultyLevel = Mapper.Map<TaskDificulty>(databaseEntitiesTaskDificultyLevel);
+                    taskDificultyLevelList.Add(dificultyLevel);
+                }
+
+                return taskDificultyLevelList;
+            }
+        }
         #endregion
 
         #region User region
@@ -171,6 +185,8 @@ namespace AgileDevelopmentPlatform.Models
                 return userList;
             }
         }
+
+     
 
         public UserModel FindUserByUserId(string userId)
         {

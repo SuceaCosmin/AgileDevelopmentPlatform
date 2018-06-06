@@ -1,4 +1,5 @@
-﻿@model AgileDevelopmentPlatform.ViewModel.NewTaskViewModel
+﻿@using AgileDevelopmentPlatform.Models
+@model AgileDevelopmentPlatform.ViewModel.NewTaskViewModel
 
 @{
     ViewBag.Title = "title";
@@ -25,13 +26,19 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.Priority)
-                    @Html.DropDownListFor(m => m.Priority,new SelectList(Model.PriorityType,"Priority"),"Select the tasks priority", new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.Priority, new SelectList(Model.PriorityType, "Priority"), "Select the tasks priority", new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Priority)
                 </div>
-                    @Html.HiddenFor(m => m.ProjectId)
-                    @Html.HiddenFor(m => m.TaskId)
-                    @Html.AntiForgeryToken()
+                <div class="form-group">
+                    @Html.LabelFor(m => m.TaskDificulty)
+                    @Html.DropDownListFor(m => m.TaskDificulty, new SelectList(Model.TaskDificultyList,"Id","Name"), "Select the tasks dificulty level", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.TaskDificulty)
                 </div>
+                @Html.HiddenFor(m => m.ProjectId)
+                @Html.HiddenFor(m => m.TaskId)         
+                @Html.HiddenFor(m=>m.PriorityType)
+                @Html.AntiForgeryToken()
+            </div>
             </div>
         <div class="modal-footer">
             <button class="btn btn-default" data-dismiss="modal">Cancel</button>
