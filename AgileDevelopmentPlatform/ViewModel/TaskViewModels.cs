@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -79,6 +78,8 @@ namespace AgileDevelopmentPlatform.ViewModel
         public string Name { get; set; }
 
         public int Id { get; set; }
+
+        public bool IsCompleted { get; set; }
     }
 
     public class AssignTaskToSprintViewModel

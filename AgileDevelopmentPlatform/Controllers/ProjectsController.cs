@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using AgileDevelopmentPlatform.DebugUtilities;
 using AgileDevelopmentPlatform.Models;
 using AgileDevelopmentPlatform.ViewModel;
 using Microsoft.AspNet.Identity;
@@ -144,6 +143,11 @@ namespace AgileDevelopmentPlatform.Controllers
                         Id = taskModel.Id,
                         Name = taskModel.Name
                     };
+                    if (taskModel.Status.Equals(TaskState.Finished))
+                    {
+                        taskReference.IsCompleted = true;
+                    }
+
                     taskList.Add(taskReference);
                 }
 
@@ -177,6 +181,7 @@ namespace AgileDevelopmentPlatform.Controllers
                             }
                             else if (currentTask.Status.Equals(TaskState.Finished))
                             {
+                                task.IsCompleted = true;
                                 finishedTasks++;
                             }
                         }
@@ -530,6 +535,21 @@ namespace AgileDevelopmentPlatform.Controllers
             return PartialView("EditTask", model);
         }
 
+        public ActionResult ReopenTask(int id)
+        {
+           var task= _dataManager.FindTaskById(id);
+            if (task == null)
+            {
+                return HttpNotFound();
+            }
+
+            task.Status = TaskState.Working;
+            _dataManager.UpdateTask(task);
+            _dataManager.SaveChanges();
+            return RedirectToAction("ViewProject", "Projects", new { Id = task.ProjectId });
+        
+           
+        }
         #endregion
 
 
