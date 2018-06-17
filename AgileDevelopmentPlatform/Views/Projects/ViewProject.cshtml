@@ -20,6 +20,7 @@
            
         }
         <button class="button btn-success hover" onclick="CreateNewSprint()">Create sprint</button>
+        <button class="button btn-success hover" onclick="GenerateProjectReport(@Model.Id)">Generate report</button>
     </div>
 
     <div id="sprintSection" class="form-group">
@@ -41,11 +42,11 @@
                 else
                 {
                     <div class="row">
-                        <div class=" col-md-4"></div>
-                        <div class=" col-md-2"><h4>Open tasks @sprintModel.OpenTasks</h4></div>
-                        <div class=" col-md-2"><h4>Working tasks @sprintModel.WorkingTasks</h4></div>
-                        <div class=" col-md-2"><h4>Finished tasks @sprintModel.FinishedTasks</h4></div>
                         <div class=" col-md-2"></div>
+                        <div class=" col-md-2"><h5>Open tasks: @sprintModel.OpenTasks</h5></div>
+                        <div class=" col-md-2"><h5>Working tasks: @sprintModel.WorkingTasks</h5></div>
+                        <div class=" col-md-2"><h5>Finished tasks: @sprintModel.FinishedTasks</h5></div>
+                        <div class=" col-md-4"><h5>Percentage of completion: @sprintModel.PercentageOfCompletion %</h5></div>
 
                     </div>
 
@@ -217,8 +218,6 @@
 
 
     function CreateNewSprint() {
-
-
         $("#newTaskCreationBody").load('@Url.Action("NewSprint", "Projects", new {projectId = @Model.Id})',
             function() {
                 $("#taskCreationModal").modal("show");
@@ -226,5 +225,7 @@
 
 
     };
+
+
 </script>
 

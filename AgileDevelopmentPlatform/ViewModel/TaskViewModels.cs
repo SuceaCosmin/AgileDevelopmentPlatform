@@ -44,6 +44,7 @@ namespace AgileDevelopmentPlatform.ViewModel
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Task initiator")]
         public string TaskInitiatorId { get; set; }
 
         [Display(Name = "Responsible user")]

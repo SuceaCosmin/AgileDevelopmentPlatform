@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AgileDevelopmentPlatform.Models;
+using AgileDevelopmentPlatform.ViewModel;
+using AutoMapper;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using AgileDevelopmentPlatform.Models;
-using AgileDevelopmentPlatform.ViewModel;
-using Microsoft.AspNet.Identity;
-using AutoMapper;
 
 namespace AgileDevelopmentPlatform.Controllers
 {
@@ -44,6 +44,11 @@ namespace AgileDevelopmentPlatform.Controllers
         }
 
         #region Project
+
+        public ActionResult PrintProjects()
+        {
+            return new Rotativa.ActionAsPdf("Index");
+        }
 
         public ActionResult NewProject()
         {
@@ -161,6 +166,7 @@ namespace AgileDevelopmentPlatform.Controllers
                 int openTasks = 0;
                 int workingTask = 0;
                 int finishedTasks = 0;
+                int percentageOfCompletion = 0;
                 try
                 {
                     //TODO  see why what is the problem and why the respons is 0 0 0 
@@ -187,6 +193,9 @@ namespace AgileDevelopmentPlatform.Controllers
                         }
 
                     });
+                    int totalNumberOfTasks = openTasks + workingTask + finishedTasks;
+                    percentageOfCompletion = finishedTasks * 100 / totalNumberOfTasks;
+
                 }
                 catch
                 {
@@ -196,6 +205,7 @@ namespace AgileDevelopmentPlatform.Controllers
                 model.OpenTasks = openTasks;
                 model.WorkingTasks = workingTask;
                 model.FinishedTasks = finishedTasks;
+                model.PercentageOfCompletion = percentageOfCompletion;
 
                 sprintList.Add(model);
 
@@ -262,12 +272,14 @@ namespace AgileDevelopmentPlatform.Controllers
 
            var userAccess= _dataManager.GetUserAccessOnProject(projectId);
 
-            List<UserSelectViewModel> selectableUsers= new List<UserSelectViewModel>();
-            selectableUsers.Add(new UserSelectViewModel()
+            List<UserSelectViewModel> selectableUsers = new List<UserSelectViewModel>
             {
-                Id = "",
-                UserName = "<none>"
-            });
+                new UserSelectViewModel()
+                {
+                    Id = "",
+                    UserName = "<none>"
+                }
+            };
 
             _dataManager.UserList.ForEach(user =>
             {
@@ -348,12 +360,14 @@ namespace AgileDevelopmentPlatform.Controllers
                 return HttpNotFound();
             }
 
-            List<SelectListItem> sprintList = new List<SelectListItem>();
-            sprintList.Add(new SelectListItem()
+            List<SelectListItem> sprintList = new List<SelectListItem>
             {
-                Text = "",
-                Value = "0"
-            });
+                new SelectListItem()
+                {
+                    Text = "",
+                    Value = "0"
+                }
+            };
             project.SprintList.ForEach(sprint =>
             {
                 sprintList.Add(new SelectListItem()
@@ -552,7 +566,13 @@ namespace AgileDevelopmentPlatform.Controllers
         }
         #endregion
 
+        #region Report
 
+        public ActionResult Reports(int projectId)
+        {
+            return View("ReportView");
+        }
+        #endregion
 
     }
 }

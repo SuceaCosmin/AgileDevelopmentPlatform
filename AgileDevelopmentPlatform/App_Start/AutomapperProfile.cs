@@ -1,5 +1,4 @@
-﻿using System.Web.ClientServices.Providers;
-using AgileDevelopmentPlatform.Models;
+﻿using AgileDevelopmentPlatform.Models;
 using AgileDevelopmentPlatform.ViewModel;
 using AutoMapper;
 

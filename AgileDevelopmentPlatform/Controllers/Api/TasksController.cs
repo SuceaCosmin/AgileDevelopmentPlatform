@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using AgileDevelopmentPlatform.Models;
+﻿using AgileDevelopmentPlatform.Models;
 using AgileDevelopmentPlatform.ViewModel;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Http;
 
 namespace AgileDevelopmentPlatform.Controllers.Api
 {

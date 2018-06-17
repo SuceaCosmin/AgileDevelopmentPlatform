@@ -10,8 +10,7 @@
 namespace AgileDevelopmentPlatform
 {
     using System;
-    using System.Collections.Generic;
-    
+
     public partial class Task
     {
         public int Id { get; set; }
