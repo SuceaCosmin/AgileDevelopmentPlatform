@@ -219,11 +219,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgileDevelopmentDatabaseDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AgileDevelopmentDatabaseDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="AgileDevelopmentPlatformEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -259,8 +254,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Reports\TopContributorReportModel.cs" />
     <Compile Include="Models\TaskModels.cs" />
     <Compile Include="Models\UserAccessModel.cs" />
+    <Compile Include="Models\UserContribution.cs" />
+    <Compile Include="Reports\Builder\TopContributorsReportBuilder.cs" />
     <Compile Include="TaskDificultyLevel.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
     </Compile>
@@ -274,6 +272,8 @@
     <Compile Include="Models\ProjectModels.cs" />
     <Compile Include="ViewModel\ProjectViewModels.cs" />
     <Compile Include="Models\SprintModel.cs" />
+    <Compile Include="ViewModel\Reports\TopContributorsReportViewModel.cs" />
+    <Compile Include="ViewModel\Reports\UserContributionViewModel.cs" />
     <Compile Include="ViewModel\SprintViewModels.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="ViewModel\TaskDificultyViewModel.cs" />
@@ -423,6 +423,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resource\editButton.png" />
+    <Content Include="Resource\viewButton.png" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />
@@ -445,17 +447,6 @@
     <Content Include="Content\DataTables\css\common.scss" />
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
-    <Content Include="AgileDevelopmentDatabaseDataSet.xsc">
-      <DependentUpon>AgileDevelopmentDatabaseDataSet.xsd</DependentUpon>
-    </Content>
-    <None Include="AgileDevelopmentDatabaseDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>AgileDevelopmentDatabaseDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="AgileDevelopmentDatabaseDataSet.xss">
-      <DependentUpon>AgileDevelopmentDatabaseDataSet.xsd</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
@@ -578,7 +569,8 @@
     <Content Include="Views\Projects\AssignTaskToSprint.cshtml" />
     <Content Include="Views\Projects\AccessManagement.cshtml" />
     <Content Include="Views\Projects\AddUserToProject.cshtml" />
-    <Content Include="Views\Projects\Reports.cshtml" />
+    <Content Include="Views\Projects\Reports\Reports.cshtml" />
+    <Content Include="Views\Projects\Reports\_partialTopContributorReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

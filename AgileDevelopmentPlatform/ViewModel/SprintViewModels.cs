@@ -19,6 +19,7 @@ namespace AgileDevelopmentPlatform.ViewModel
         public int WorkingTasks { get; set; }
 
         public int FinishedTasks { get; set; }
+
         public int PercentageOfCompletion { get; set; }
     }
 

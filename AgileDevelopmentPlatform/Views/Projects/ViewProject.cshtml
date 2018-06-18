@@ -12,15 +12,17 @@
 }
 <div>
     <div>
-        <H2>Project @Model.Name</H2>
-        @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
-        {
+            <H2>Project @Model.Name</H2>
 
-            @Html.ActionLink("Edit user access on project", "EditProjectAccess", "Projects", new { id = Model.Id }, null)
-           
-        }
+            @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
+            {
+
+                @Html.ActionLink("Edit user access on project", "EditProjectAccess", "Projects", new {id = Model.Id}, null)
+
+            }
         <button class="button btn-success hover" onclick="CreateNewSprint()">Create sprint</button>
-        <button class="button btn-success hover" onclick="GenerateProjectReport(@Model.Id)">Generate report</button>
+            @Html.ActionLink("Reports","Reports","Projects", new {projectId= Model.Id},null)
+        
     </div>
 
     <div id="sprintSection" class="form-group">
@@ -73,7 +75,7 @@
                                                 <button class="btn-success" onclick="ReopenTask(@task.Id)">Reopen task</button>
                                             }
 
-                                            <button class="btn-danger " onclick="DeleteTask(@task.Id)">Remove</button>
+                                            <button class="btn-danger " onclick="DeleteTask(@task.Id)">Delete</button>
                                         </td>
 
                                     </tr>
@@ -87,12 +89,12 @@
         }
     </div>
     <div class="form-group" id="backlogSection">
-        <div class="row form-group">
+        <div class="row">
             <div class="col-md-10">
-                <H1>Backlog</H1>
+                <h1>Backlog</h1>
             </div>
             <div class="col-md-2">
-                <button class="button btn-success hover" onclick="CreateNewTask()">Create task</button>
+                <button class="button btn-success hover" style="vertical-align:baseline" onclick="CreateNewTask()">Add new task</button>
             </div>
         </div>
         @if (!Model.TaskList.Any())
@@ -222,9 +224,16 @@
             function() {
                 $("#taskCreationModal").modal("show");
             });
-
-
     };
+
+    function ProjectReport(projectId) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Reports", "Projects")',                    
+            data: { projectId: projectId },                     
+            error: function() { alert('A error'); }
+        });
+    }
 
 
 </script>

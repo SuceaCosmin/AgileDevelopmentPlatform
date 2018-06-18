@@ -1,0 +1,16 @@
+﻿@using AgileDevelopmentPlatform.ViewModel.Reports
+@model AgileDevelopmentPlatform.ViewModel.Reports.TopContributorsReportViewModel
+@{
+    ViewBag.Title = "ViewProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>Project summary:@Model.ProjectName </h1>
+    @Html.ActionLink("Print report", "PrintReports", "Projects", new {projectId = Model.ProjectId}, null)
+    @{
+        Html.RenderPartial("Reports/_partialTopContributorReport", @Model);
+    }
+    ;
+</div>
+

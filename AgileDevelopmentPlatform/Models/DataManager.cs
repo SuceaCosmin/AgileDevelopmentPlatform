@@ -101,6 +101,18 @@ namespace AgileDevelopmentPlatform.Models
 
         }
 
+        public List<TaskModel> FindTasksByProjectId(int projectId)
+        {
+            List<TaskModel> taskList = new List<TaskModel>();
+            foreach (Task task in _databaseEntities.Tasks.Where(task => task.ProjectId == projectId))
+            {
+                TaskModel model = Mapper.Map<TaskModel>(task);
+                taskList.Add(model);
+            }
+
+            return taskList;
+        }
+
         public void UpdateTask(TaskModel taskModel)
         {
             var taskInDb = _databaseEntities.Tasks.SingleOrDefault(task => task.Id == taskModel.Id);
@@ -261,7 +273,6 @@ namespace AgileDevelopmentPlatform.Models
         {
             _databaseEntities.SaveChanges();
         }
-
 
         public void AddSprint(SprintModel sprintModel)
         {

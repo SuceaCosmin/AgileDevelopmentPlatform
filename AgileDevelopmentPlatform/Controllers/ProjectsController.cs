@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AgileDevelopmentPlatform.Reports.Builder;
+using AgileDevelopmentPlatform.ViewModel.Reports;
 
 namespace AgileDevelopmentPlatform.Controllers
 {
@@ -44,11 +46,6 @@ namespace AgileDevelopmentPlatform.Controllers
         }
 
         #region Project
-
-        public ActionResult PrintProjects()
-        {
-            return new Rotativa.ActionAsPdf("Index");
-        }
 
         public ActionResult NewProject()
         {
@@ -570,8 +567,58 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult Reports(int projectId)
         {
-            return View("ReportView");
+            var project = _dataManager.FindProjectById(projectId);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+           
+            TopContributorsReportBuilder builder = new TopContributorsReportBuilder(_dataManager);
+
+            List<UserContribution> contributionList= builder.CalculateUserContributions(project);
+
+            List<UserContributionViewModel> viewModels= new List<UserContributionViewModel>();
+            contributionList.ForEach(contribution => viewModels.Add(Mapper.Map<UserContributionViewModel>(contribution)) );
+
+            TopContributorsReportViewModel model= new TopContributorsReportViewModel()
+            {
+                ProjectName = project.Name,
+                ProjectId =project.Id,
+                UserContributionList = viewModels
+            };
+            return View("Reports/Reports", model);
         }
+        public ActionResult PrintReports(int projectId)
+        {
+            var project = _dataManager.FindProjectById(projectId);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            TopContributorsReportBuilder builder = new TopContributorsReportBuilder(_dataManager);
+
+            List<UserContribution> contributionList = builder.CalculateUserContributions(project);
+
+            List<UserContributionViewModel> viewModels = new List<UserContributionViewModel>();
+            contributionList.ForEach(contribution => viewModels.Add(Mapper.Map<UserContributionViewModel>(contribution)));
+
+            TopContributorsReportViewModel model = new TopContributorsReportViewModel()
+            {
+                ProjectName = project.Name,
+                ProjectId = project.Id,
+                UserContributionList = viewModels
+            };
+
+            var action= new Rotativa.ViewAsPdf("Reports/_partialTopContributorReport", model: model)
+             {
+                 FileName = "Project Summary.pdf"
+             };
+            return action;
+        }
+
+     
+
         #endregion
 
     }

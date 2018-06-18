@@ -1,0 +1,26 @@
+﻿@using AgileDevelopmentPlatform.ViewModel.Reports
+@model AgileDevelopmentPlatform.ViewModel.Reports.TopContributorsReportViewModel
+
+<h2>Top contributor ranking:</h2>
+<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="col-md-6">Name</th>
+            <th class="col-md-3">Contribution points</th>
+            <th class="col-md-3">Contribution percentage %</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (UserContributionViewModel userContributionviewModel in @Model.UserContributionList)
+        {
+            <tr>
+                <td>@userContributionviewModel.Name</td>
+                <td> @userContributionviewModel.ContributionPoints </td>
+                <td> @userContributionviewModel.ContributionPercentage </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+

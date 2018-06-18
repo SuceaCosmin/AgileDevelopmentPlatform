@@ -1,5 +1,6 @@
 ﻿using AgileDevelopmentPlatform.Models;
 using AgileDevelopmentPlatform.ViewModel;
+using AgileDevelopmentPlatform.ViewModel.Reports;
 using AutoMapper;
 
 namespace AgileDevelopmentPlatform
@@ -52,6 +53,12 @@ namespace AgileDevelopmentPlatform
 
             CreateMap<UserAccessModel, UserAccess>();
             CreateMap<UserAccess, UserAccessModel>();
+
+            #region Report mappings
+
+            CreateMap<UserContribution, UserContributionViewModel>();
+
+            #endregion
 
         }
     }
