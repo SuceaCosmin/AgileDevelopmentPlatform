@@ -9,7 +9,9 @@
 
 namespace AgileDevelopmentPlatform
 {
-
+    using System;
+    using System.Collections.Generic;
+    
     public partial class UserAccess
     {
         public int Id { get; set; }

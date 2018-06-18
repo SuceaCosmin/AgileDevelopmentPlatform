@@ -15,4 +15,16 @@ namespace AgileDevelopmentPlatform.Models
         public List<TaskModel> Tasks { get; set; }
 
     }
+
+    public class SprintStatusModel
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public List<TaskStatusModel> TaskStatusList { get; set; }
+
+    }
+
+
 }

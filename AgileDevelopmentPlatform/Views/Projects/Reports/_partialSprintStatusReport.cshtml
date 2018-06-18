@@ -1,0 +1,39 @@
+﻿@using AgileDevelopmentPlatform.ViewModel.Reports
+@model AgileDevelopmentPlatform.ViewModel.Reports.SprintStatusReportViewModel
+
+
+<h2>Sprint status report: @Model.Name </h2>
+@Html.ActionLink("Print report", "PrintSprintStatusReport", "Projects", new { sprintId = Model.Id}, null)
+<div>
+    @if(@Model.TaskStatusList.Count>0){
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="col-md-2">Name</th>
+            <th class="col-md-2">Responsible user</th>
+            <th class="col-md-2">Dificulty</th>
+            <th class="col-md-2">Effort estimation(h)</th>
+            <th class="col-md-2">Actual work effort(h)</th>
+            <th class="col-md-2">Task state</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach (TaskStatusReportViewModel taskStatus in @Model.TaskStatusList)
+        {
+            <tr>
+                <td>@taskStatus.Name</td>
+                <td> @taskStatus.ResponsibleUser </td>
+                <td> @taskStatus.Dificulty </td>
+                <td> @taskStatus.EffortEstimation </td>
+                <td> @taskStatus.WorkEffort </td>
+                <td> @taskStatus.Status </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    }else{
+    <text>No tasks have been assigned to this project yet.</text>
+    }
+   
+</div>

@@ -57,6 +57,8 @@ namespace AgileDevelopmentPlatform
             #region Report mappings
 
             CreateMap<UserContribution, UserContributionViewModel>();
+            CreateMap<TaskStatusModel, TaskStatusReportViewModel>();
+            CreateMap<SprintStatusModel, SprintStatusReportViewModel>();
 
             #endregion
 

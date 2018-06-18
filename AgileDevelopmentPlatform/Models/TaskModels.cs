@@ -66,6 +66,8 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Priority { get; set; }
 
+        public int EffortEstimation { get; set; }
+
         public int WorkEffort { get; set; }
 
         public int TaskDificultyId { get; set; }
@@ -82,4 +84,22 @@ namespace AgileDevelopmentPlatform.Models
         public string Name { get; set; }
         public int ContributionPoints { get; set; }
     }
+
+    public class TaskStatusModel
+    {
+        public string Name { get; set; }
+
+        public string ResponsibleUser { get; set; }
+
+        public string Dificulty { get; set; }
+
+        public int EffortEstimation { get; set; }
+
+        public int WorkEffort { get; set; }
+
+        public string Status { get; set; }
+
+        public bool EstimationExceded => WorkEffort > EffortEstimation;
+    }
+
 }

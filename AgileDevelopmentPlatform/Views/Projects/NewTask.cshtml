@@ -24,6 +24,7 @@
                     @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Description)
                 </div>
+
                 <div class="form-group">
                     @Html.LabelFor(m => m.Priority)
                     @Html.DropDownListFor(m => m.Priority, new SelectList(Model.PriorityType, "Priority"), "Select the tasks priority", new { @class = "form-control" })
@@ -33,6 +34,11 @@
                     @Html.LabelFor(m => m.TaskDificulty)
                     @Html.DropDownListFor(m => m.TaskDificulty, new SelectList(Model.TaskDificultyList,"Id","Name"), "Select the tasks dificulty level", new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.TaskDificulty)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EffortEstimation)
+                    @Html.TextBoxFor(m => m.EffortEstimation, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.EffortEstimation)
                 </div>
                 @Html.HiddenFor(m => m.ProjectId)
                 @Html.HiddenFor(m => m.TaskId)         

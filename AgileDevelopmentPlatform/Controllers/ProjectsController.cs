@@ -441,6 +441,8 @@ namespace AgileDevelopmentPlatform.Controllers
         public ActionResult AddNewTask(NewTaskViewModel taskView)
         {
 
+            //TODO: Effort estimation is not saved
+
             //TODO: see how to make the client side validation work.
             //TODO: there is a a null pointer exception on DropDownList in case of sending view again due to invalid data
 
@@ -464,6 +466,7 @@ namespace AgileDevelopmentPlatform.Controllers
                 Description = taskView.Description,
                 ProjectId = taskView.ProjectId,
                 Priority = taskView.Priority,
+                EffortEstimation = taskView.EffortEstimation,
                 WorkEffort = 0,
                 TaskDificultyId = taskView.TaskDificulty,
                 TaskCreationDate = DateTime.Today,
@@ -483,7 +486,11 @@ namespace AgileDevelopmentPlatform.Controllers
             if (!ModelState.IsValid)
             {
                 List<UserSelectViewModel> userList = new List<UserSelectViewModel>();
-                foreach (var userModel in _dataManager.UserList)
+                TaskModel model = _dataManager.FindTaskById(taskView.Id);
+
+                var usersOnProject = _dataManager.GetProjectTeam(model.ProjectId);
+
+                foreach (var userModel in usersOnProject)
                 {
 
                     var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
@@ -521,7 +528,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
             //TODO: Return only the users that have access to the project.
             List<UserSelectViewModel> userList = new List<UserSelectViewModel>();
-            foreach (var userModel in _dataManager.UserList)
+            foreach (var userModel in _dataManager.GetProjectTeam(task.ProjectId))
             {
 
                 var selectUser = Mapper.Map<UserSelectViewModel>(userModel);
@@ -580,15 +587,38 @@ namespace AgileDevelopmentPlatform.Controllers
             List<UserContributionViewModel> viewModels= new List<UserContributionViewModel>();
             contributionList.ForEach(contribution => viewModels.Add(Mapper.Map<UserContributionViewModel>(contribution)) );
 
-            TopContributorsReportViewModel model= new TopContributorsReportViewModel()
+            TopContributorsReportViewModel topContributorsReportViewModel= new TopContributorsReportViewModel()
             {
                 ProjectName = project.Name,
                 ProjectId =project.Id,
                 UserContributionList = viewModels
             };
+
+           
+            List<SprintStatusModel> sprintStatusModelList = new List<SprintStatusModel>();
+
+            SprintStatusReportBuilder statusReportBuilder= new SprintStatusReportBuilder(_dataManager);
+
+            project.SprintList.ForEach(sprint =>
+            {
+                SprintStatusModel sprintStatusModel = statusReportBuilder.BuildSprintStatus(sprint.Id);
+                sprintStatusModelList.Add(sprintStatusModel);
+            });
+
+
+            List<SprintStatusReportViewModel> sprintStatusReportViewModelList =
+                Mapper.Map<List<SprintStatusReportViewModel>>(sprintStatusModelList);
+
+            OverrallReportViewModel model= new OverrallReportViewModel()
+            {
+                TopContributorsReportViewModel = topContributorsReportViewModel,
+                SprintStatusReportViewList = sprintStatusReportViewModelList
+            };
+
             return View("Reports/Reports", model);
         }
-        public ActionResult PrintReports(int projectId)
+
+        public ActionResult PrintTopContributorsReport(int projectId)
         {
             var project = _dataManager.FindProjectById(projectId);
             if (project == null)
@@ -617,7 +647,28 @@ namespace AgileDevelopmentPlatform.Controllers
             return action;
         }
 
-     
+        public ActionResult PrintSprintStatusReport(int sprintId)
+        {
+            SprintModel sprintModel = _dataManager.FindSprintById(sprintId);
+
+            if (sprintModel == null)
+            {
+                HttpNotFound();
+            }
+
+            SprintStatusReportBuilder statusReportBuilder = new SprintStatusReportBuilder(_dataManager);
+            var sprintReport = statusReportBuilder.BuildSprintStatus(sprintModel.Id);
+
+            SprintStatusReportViewModel model = Mapper.Map<SprintStatusReportViewModel>(sprintReport);
+
+            var action = new Rotativa.ViewAsPdf("Reports/_partialSprintStatusReport", model: model)
+            {
+                FileName = "Sprint status report.pdf"
+            };
+            return action;
+
+        }
+
 
         #endregion
 

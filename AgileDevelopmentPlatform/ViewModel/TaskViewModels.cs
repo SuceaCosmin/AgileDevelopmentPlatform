@@ -23,6 +23,8 @@ namespace AgileDevelopmentPlatform.ViewModel
 
         public int ProjectId { get; set; }
 
+        public int EffortEstimation { get; set; }
+
         [Required]
         [Display(Name = "Dificulty")]
         public int TaskDificulty { get; set; }
@@ -35,7 +37,7 @@ namespace AgileDevelopmentPlatform.ViewModel
     public class EditTaskViewModel
     {
 
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(255)]
@@ -58,6 +60,8 @@ namespace AgileDevelopmentPlatform.ViewModel
         [Required]
         public string Status { get; set; }
         public IEnumerable<string> TaskStateList { get; set; }
+
+        public int EffortEstimation { get; set; }
 
         [Display(Name="Work effort(h)")]
         public int WorkEffort { get; set; }

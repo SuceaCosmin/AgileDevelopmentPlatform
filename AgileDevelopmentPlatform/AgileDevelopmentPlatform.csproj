@@ -258,6 +258,7 @@
     <Compile Include="Models\TaskModels.cs" />
     <Compile Include="Models\UserAccessModel.cs" />
     <Compile Include="Models\UserContribution.cs" />
+    <Compile Include="Reports\Builder\SprintStatusReportBuilder.cs" />
     <Compile Include="Reports\Builder\TopContributorsReportBuilder.cs" />
     <Compile Include="TaskDificultyLevel.cs">
       <DependentUpon>AgileDevelopmentPlatformEntities.tt</DependentUpon>
@@ -272,6 +273,9 @@
     <Compile Include="Models\ProjectModels.cs" />
     <Compile Include="ViewModel\ProjectViewModels.cs" />
     <Compile Include="Models\SprintModel.cs" />
+    <Compile Include="ViewModel\Reports\OverrallReportViewModel.cs" />
+    <Compile Include="ViewModel\Reports\SprintStatusViewModel.cs" />
+    <Compile Include="ViewModel\Reports\TaskStatusReportViewModel.cs" />
     <Compile Include="ViewModel\Reports\TopContributorsReportViewModel.cs" />
     <Compile Include="ViewModel\Reports\UserContributionViewModel.cs" />
     <Compile Include="ViewModel\SprintViewModels.cs" />
@@ -571,6 +575,7 @@
     <Content Include="Views\Projects\AddUserToProject.cshtml" />
     <Content Include="Views\Projects\Reports\Reports.cshtml" />
     <Content Include="Views\Projects\Reports\_partialTopContributorReport.cshtml" />
+    <Content Include="Views\Projects\Reports\_partialSprintStatusReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

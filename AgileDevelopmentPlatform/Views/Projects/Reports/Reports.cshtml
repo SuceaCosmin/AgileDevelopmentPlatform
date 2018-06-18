@@ -1,16 +1,27 @@
 ﻿@using AgileDevelopmentPlatform.ViewModel.Reports
-@model AgileDevelopmentPlatform.ViewModel.Reports.TopContributorsReportViewModel
+@model AgileDevelopmentPlatform.ViewModel.Reports.OverrallReportViewModel
 @{
     ViewBag.Title = "ViewProject";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
-    <h1>Project summary:@Model.ProjectName </h1>
-    @Html.ActionLink("Print report", "PrintReports", "Projects", new {projectId = Model.ProjectId}, null)
-    @{
-        Html.RenderPartial("Reports/_partialTopContributorReport", @Model);
-    }
-    ;
+    
+    
+    <div class="form-group">
+        <h1>Project summary:@Model.TopContributorsReportViewModel.ProjectName </h1>
+        @Html.ActionLink("Print report", "PrintTopContributorsReport", "Projects", new {projectId = Model.TopContributorsReportViewModel.ProjectId}, null)
+        @{
+            Html.RenderPartial("Reports/_partialTopContributorReport", @Model.TopContributorsReportViewModel);
+        }
+    </div>
+    
+     @foreach (var sprintStatusReport in @Model.SprintStatusReportViewList)
+     {
+        
+             Html.RenderPartial("Reports/_partialSprintStatusReport",sprintStatusReport);
+        
+     }
+
 </div>
 

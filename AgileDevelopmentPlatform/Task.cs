@@ -10,7 +10,8 @@
 namespace AgileDevelopmentPlatform
 {
     using System;
-
+    using System.Collections.Generic;
+    
     public partial class Task
     {
         public int Id { get; set; }
@@ -26,6 +27,7 @@ namespace AgileDevelopmentPlatform
         public Nullable<int> TaskDificultyId { get; set; }
         public Nullable<System.DateTime> TaskCreationDate { get; set; }
         public Nullable<System.DateTime> TaskCompletionDate { get; set; }
+        public Nullable<int> EffortEstimation { get; set; }
     
         public virtual Project Project { get; set; }
         public virtual Sprint Sprint { get; set; }

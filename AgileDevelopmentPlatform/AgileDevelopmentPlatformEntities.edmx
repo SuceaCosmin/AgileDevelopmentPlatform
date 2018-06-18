@@ -36,6 +36,7 @@
           <Property Name="Priority" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="WorkEffort" Type="int" />
+          <Property Name="EffortEstimation" Type="int" />
           <Property Name="TaskDificultyId" Type="int" />
           <Property Name="TaskCreationDate" Type="date" />
           <Property Name="TaskCompletionDate" Type="date" />
@@ -44,7 +45,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ContributionPoints" Type="int" Nullable="false" />
         </EntityType>
@@ -351,6 +352,7 @@
           <Property Name="TaskCreationDate" Type="DateTime" Precision="0" />
           <Property Name="TaskCompletionDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="TaskDificultyLevel" Relationship="AgileDevelopmentDatabaseModel.FK_Task_TaskDificultyLevel" FromRole="Task" ToRole="TaskDificultyLevel" />
+          <Property Name="EffortEstimation" Type="Int32" />
         </EntityType>
         <Association Name="FK_TaskTable_ProjectTable">
           <End Type="AgileDevelopmentDatabaseModel.Project" Role="Project" Multiplicity="1" />
@@ -513,6 +515,7 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="EffortEstimation" ColumnName="EffortEstimation" />
                 <ScalarProperty Name="TaskCompletionDate" ColumnName="TaskCompletionDate" />
                 <ScalarProperty Name="TaskCreationDate" ColumnName="TaskCreationDate" />
                 <ScalarProperty Name="TaskDificultyId" ColumnName="TaskDificultyId" />

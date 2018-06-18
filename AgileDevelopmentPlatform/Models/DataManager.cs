@@ -72,11 +72,12 @@ namespace AgileDevelopmentPlatform.Models
 
         #region Sprint region
 
-        public List<SprintModel> FindSprintByProjectName(int projectId)
+        public SprintModel FindSprintById(int sprintId)
         {
-            List<SprintModel> sprintList=new List<SprintModel>();
+           var model= _databaseEntities.Sprints.FirstOrDefault(sprint => sprint.Id == sprintId);
 
-            return sprintList;
+           return Mapper.Map<SprintModel>(model);
+
         }
 
         #endregion
@@ -198,7 +199,26 @@ namespace AgileDevelopmentPlatform.Models
             }
         }
 
-     
+        /// <summary>
+        /// Method used to get the list of users that have access to a project.
+        /// </summary>
+        /// <param name="projectId">represents the project id</param>
+        /// <returns></returns>
+        public List<UserModel> GetProjectTeam(int projectId)
+        {
+            List<UserModel> projectUserList = new List<UserModel>();
+            var projectUserAccess=GetUserAccessOnProject(projectId);
+            UserList.ForEach(user =>
+            {
+                if (projectUserAccess.Any(model => model.UserId.Equals(user.Id)))
+                {
+                    projectUserList.Add(user);
+                }
+            });
+
+
+            return projectUserList;
+        }
 
         public UserModel FindUserByUserId(string userId)
         {
@@ -281,6 +301,6 @@ namespace AgileDevelopmentPlatform.Models
         }
 
 
-      
+       
     }
 }
