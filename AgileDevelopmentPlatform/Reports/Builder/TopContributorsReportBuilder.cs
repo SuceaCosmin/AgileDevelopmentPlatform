@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AgileDevelopmentPlatform.Models;
 
 namespace AgileDevelopmentPlatform.Reports.Builder
@@ -55,9 +56,9 @@ namespace AgileDevelopmentPlatform.Reports.Builder
                 double contributionPercentage = 0;
                 try
                 {
-                    contributionPercentage=(contributionPoints * 100) / totalContributionPoints ;
+                    contributionPercentage=contributionPoints * 100 / totalContributionPoints ;
                 }
-                catch (DivideByZeroException e)
+                catch (DivideByZeroException )
                 {
                     //TODO: Add message maybe
                 }
@@ -73,9 +74,8 @@ namespace AgileDevelopmentPlatform.Reports.Builder
                 userContributionList.Add(contributionViewModel);
             }
 
-            userContributionList.Sort((model1, model2) => model1.ContributionPoints.CompareTo(model2.ContributionPoints));
-
-            return userContributionList;
+            return userContributionList.OrderByDescending(contribution => totalContributionPoints).ToList();
+                     
 
         }
     }

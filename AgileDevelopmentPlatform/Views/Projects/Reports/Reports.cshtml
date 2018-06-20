@@ -9,8 +9,8 @@
     
     
     <div class="form-group">
-        <h1>Project summary:@Model.TopContributorsReportViewModel.ProjectName </h1>
-        @Html.ActionLink("Print report", "PrintTopContributorsReport", "Projects", new {projectId = Model.TopContributorsReportViewModel.ProjectId}, null)
+        <h1>Project: @Model.TopContributorsReportViewModel.ProjectName </h1>
+    
         @{
             Html.RenderPartial("Reports/_partialTopContributorReport", @Model.TopContributorsReportViewModel);
         }

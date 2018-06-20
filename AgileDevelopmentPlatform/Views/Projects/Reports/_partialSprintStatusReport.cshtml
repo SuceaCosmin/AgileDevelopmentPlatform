@@ -1,9 +1,13 @@
 ﻿@using AgileDevelopmentPlatform.ViewModel.Reports
-@model AgileDevelopmentPlatform.ViewModel.Reports.SprintStatusReportViewModel
+@model SprintStatusReportViewModel
 
 
 <h2>Sprint status report: @Model.Name </h2>
-@Html.ActionLink("Print report", "PrintSprintStatusReport", "Projects", new { sprintId = Model.Id}, null)
+@if (!Model.HideGenerate)
+{
+    @Html.ActionLink("Print report", "PrintSprintStatusReport", "Projects", new { sprintId = Model.Id}, null)
+}
+
 <div>
     @if(@Model.TaskStatusList.Count>0){
     <table class="table table-bordered">

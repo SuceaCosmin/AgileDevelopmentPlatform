@@ -636,7 +636,8 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 ProjectName = project.Name,
                 ProjectId = project.Id,
-                UserContributionList = viewModels
+                UserContributionList = viewModels,
+                HideGenerate = true
             };
 
             var action= new Rotativa.ViewAsPdf("Reports/_partialTopContributorReport", model: model)
@@ -659,6 +660,7 @@ namespace AgileDevelopmentPlatform.Controllers
             var sprintReport = statusReportBuilder.BuildSprintStatus(sprintModel.Id);
 
             SprintStatusReportViewModel model = Mapper.Map<SprintStatusReportViewModel>(sprintReport);
+            model.HideGenerate = true;
 
             var action = new Rotativa.ViewAsPdf("Reports/_partialSprintStatusReport", model: model)
             {

@@ -7,8 +7,15 @@ namespace AgileDevelopmentPlatform.ViewModel.Reports
 {
     public class TopContributorsReportViewModel
     {
-        public String ProjectName { get; set; }
-        public List<UserContributionViewModel> UserContributionList { get; set; }
+   
         public int ProjectId { get; set; }
+
+        public String ProjectName { get; set; }
+
+        public List<UserContributionViewModel> UserContributionList { get; set; }
+
+        public bool HideGenerate { get; set; }
+
+
     }
 }

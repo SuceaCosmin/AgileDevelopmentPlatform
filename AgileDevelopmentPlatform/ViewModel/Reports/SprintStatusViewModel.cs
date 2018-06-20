@@ -15,5 +15,7 @@ namespace AgileDevelopmentPlatform.ViewModel.Reports
         public int OverallWorkEffort { get; set; }
 
         public List<TaskStatusReportViewModel> TaskStatusList { get; set; }
+
+        public bool HideGenerate { get; set; }
     }
 }
