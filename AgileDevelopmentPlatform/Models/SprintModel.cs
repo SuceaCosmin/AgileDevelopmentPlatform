@@ -22,6 +22,12 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Name { get; set; }
 
+        public int PercentageOfCompletion { get; set; }
+
+        public int OverallEffortEstimation { get; set; }
+
+        public int OverallWorkEffort { get; set; }
+
         public List<TaskStatusModel> TaskStatusList { get; set; }
 
     }

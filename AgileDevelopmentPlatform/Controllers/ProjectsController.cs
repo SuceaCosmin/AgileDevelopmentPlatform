@@ -311,7 +311,6 @@ namespace AgileDevelopmentPlatform.Controllers
 
             return RedirectToAction("EditProjectAccess", "Projects", new { Id = model.ProjectId });
 
-
         }
 
         #endregion

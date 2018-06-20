@@ -23,6 +23,7 @@ namespace AgileDevelopmentPlatform.ViewModel
 
         public int ProjectId { get; set; }
 
+        [Display(Name = "Effort estimation(h)")]
         public int EffortEstimation { get; set; }
 
         [Required]
@@ -61,6 +62,7 @@ namespace AgileDevelopmentPlatform.ViewModel
         public string Status { get; set; }
         public IEnumerable<string> TaskStateList { get; set; }
 
+        [Display(Name = "Effort estimation(h)")]
         public int EffortEstimation { get; set; }
 
         [Display(Name="Work effort(h)")]

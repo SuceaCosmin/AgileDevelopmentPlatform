@@ -55,7 +55,7 @@ namespace AgileDevelopmentPlatform.Reports.Builder
                 double contributionPercentage = 0;
                 try
                 {
-                    contributionPercentage=(totalContributionPoints * 100) / contributionPoints;
+                    contributionPercentage=(contributionPoints * 100) / totalContributionPoints ;
                 }
                 catch (DivideByZeroException e)
                 {

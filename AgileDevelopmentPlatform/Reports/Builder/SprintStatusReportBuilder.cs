@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AgileDevelopmentPlatform.Models;
 
@@ -23,13 +22,16 @@ namespace AgileDevelopmentPlatform.Reports.Builder
             var taskDificultyLevels = _dataManager.TaskDificultyLevels;
             var userList = _dataManager.UserList;
             var tasklist = _dataManager.TaskList.Where(task => task.SprintId == sprint.Id).ToList();
-
+            int overallEffortEstimation = 0;
+            int overallWorkEffort = 0;
             List<TaskStatusModel> taskStatusModelList = new List<TaskStatusModel>();
             tasklist.ForEach(task =>
             {
                 try
                 {
                     TaskStatusModel model = BuildTaskStatus(task, taskDificultyLevels, userList);
+                    overallEffortEstimation += model.EffortEstimation;
+                    overallWorkEffort += model.WorkEffort;
                     taskStatusModelList.Add(model);
                 }
                 catch (Exception e)
@@ -38,11 +40,40 @@ namespace AgileDevelopmentPlatform.Reports.Builder
                 }
 
             });
-            
+            int totalNumberOfTasks = taskStatusModelList.Count;
+            int numberOfFinishedTasks = 0;
+
+            taskStatusModelList.ForEach(task =>
+            {
+                if (task.Status.Equals(TaskState.Finished))
+                {
+                    numberOfFinishedTasks++;
+                }
+            });
+
+
+
+            int percentageOfCompletion=0;
+            try
+            {
+                percentageOfCompletion = numberOfFinishedTasks * 100 / totalNumberOfTasks;
+            }
+            catch (Exception)
+            {
+                //Devided by zero exception
+            }
+
+     
+
+
+
             SprintStatusModel sprintStatusModel= new SprintStatusModel()
             {
                 Id = sprint.Id,
                 Name = sprint.Name,
+                PercentageOfCompletion = percentageOfCompletion,
+                OverallEffortEstimation = overallEffortEstimation,
+                OverallWorkEffort = overallWorkEffort,
                 TaskStatusList = taskStatusModelList
             };
 

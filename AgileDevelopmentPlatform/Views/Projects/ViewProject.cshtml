@@ -17,7 +17,7 @@
             @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
             {
 
-                @Html.ActionLink("Edit user access on project", "EditProjectAccess", "Projects", new {id = Model.Id}, null)
+                @Html.ActionLink("Edit user acces", "EditProjectAccess", "Projects", new {id = Model.Id}, null)
 
             }
         <button class="button btn-success hover" onclick="CreateNewSprint()">Create sprint</button>
