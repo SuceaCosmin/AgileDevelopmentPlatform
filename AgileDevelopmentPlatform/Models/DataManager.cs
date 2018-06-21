@@ -6,6 +6,8 @@ namespace AgileDevelopmentPlatform.Models
 {
     public class DataManager 
     {
+
+        private  readonly int OBJECT_STATE_DELETED =1;
         private readonly AgileDevelopmentDatabaseEntities _databaseEntities;
 
         public DataManager()
@@ -22,17 +24,22 @@ namespace AgileDevelopmentPlatform.Models
                 List<ProjectModel> projectList = new List<ProjectModel>();
                 foreach (var project in _databaseEntities.Projects)
                 {
-                    projectList.Add(Mapper.Map<ProjectModel>(project));
+                    if (project.IsDeleted == 0)
+                    {
+                        projectList.Add(Mapper.Map<ProjectModel>(project));
+                    }
                 }
 
                 return projectList;
             }
         }
 
-        public ProjectModel AddProject(ProjectModel newProject)
+        public ProjectModel CreateNewProject(ProjectModel newProject)
         {
             Project project = Mapper.Map<Project>(newProject);
+
             _databaseEntities.Projects.Add(project);
+
             SaveChanges();
             return Mapper.Map<ProjectModel>(project);
         }
@@ -62,7 +69,7 @@ namespace AgileDevelopmentPlatform.Models
            
             if (deleteProject != null)
             {
-                _databaseEntities.Projects.Remove(deleteProject);
+                deleteProject.IsDeleted = OBJECT_STATE_DELETED;
                 return true;
             }
 
@@ -72,11 +79,35 @@ namespace AgileDevelopmentPlatform.Models
 
         #region Sprint region
 
+        public void AddSprint(SprintModel sprintModel)
+        {
+            Sprint sprint = Mapper.Map<Sprint>(sprintModel);
+            _databaseEntities.Sprints.Add(sprint);
+        }
+
         public SprintModel FindSprintById(int sprintId)
         {
            var model= _databaseEntities.Sprints.FirstOrDefault(sprint => sprint.Id == sprintId);
 
            return Mapper.Map<SprintModel>(model);
+
+        }
+
+        public SprintModel getSprintById(int sprintId)
+        {
+            Sprint currentSprint= _databaseEntities.Sprints.FirstOrDefault(sprint => sprint.Id == sprintId);
+            return Mapper.Map<SprintModel>(currentSprint);
+
+        }
+
+        public void RemoveSprint(int sprintId)
+        {
+
+           var currentSprint= _databaseEntities.Sprints.FirstOrDefault(sprint => sprint.Id == sprintId);
+            if (currentSprint != null)
+            {
+                _databaseEntities.Sprints.Remove(currentSprint);
+            }
 
         }
 
@@ -294,13 +325,6 @@ namespace AgileDevelopmentPlatform.Models
             _databaseEntities.SaveChanges();
         }
 
-        public void AddSprint(SprintModel sprintModel)
-        {
-            Sprint sprint = Mapper.Map<Sprint>(sprintModel);
-            _databaseEntities.Sprints.Add(sprint);
-        }
-
-
-       
+     
     }
 }

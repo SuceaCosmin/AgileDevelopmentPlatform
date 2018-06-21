@@ -12,6 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProjectName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="OwnerId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="IsDeleted" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Sprint">
           <Key>
@@ -285,6 +286,7 @@
           <Property Name="OwnerId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="AgileDevelopmentDatabaseModel.FK_Project_User" FromRole="Project" ToRole="User" />
           <NavigationProperty Name="UserAccesses" Relationship="AgileDevelopmentDatabaseModel.FK_UserAccess_Project" FromRole="Project" ToRole="UserAccess" />
+          <Property Name="IsDeleted" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Sprint">
           <Key>
@@ -478,6 +480,7 @@
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="AgileDevelopmentDatabaseModel.Project">
               <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
                 <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

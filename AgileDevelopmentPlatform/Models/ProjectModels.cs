@@ -22,11 +22,15 @@ namespace AgileDevelopmentPlatform.Models
         public string Name { get; set; }
 
         public string OwnerId { get; set; }
+
+        public bool OwnerLogged { get; set; }
+
+        public int IsDeleted { get; set; }
     
 
         public List<SprintModel> SprintList { get; set; }
 
-        public List<TaskModel> TaskList { get; set; }   
+        public List<TaskModel> TaskList { get; set; }
 
     }
 }

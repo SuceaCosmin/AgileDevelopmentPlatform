@@ -6,8 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h2>ProjectList</h2>
+<h2>Project List</h2>
 
 <button class="button btn-link">@Html.ActionLink("Create new project", "NewProject", "Projects")</button>
 
@@ -25,7 +24,11 @@
             {
                 <tr>
                     <td>@Html.ActionLink(project.Name, "ViewProject", "Projects", new { id = project.Id }, null)</td>
-                    <td> <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button></td>
+                    <td>
+                        @if(@project.OwnerLogged){
+                        <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button>
+                        }                
+                    </td>
                 </tr>
             }
         </tbody>

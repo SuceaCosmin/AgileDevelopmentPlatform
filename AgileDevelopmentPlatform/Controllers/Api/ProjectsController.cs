@@ -3,7 +3,9 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Web;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace AgileDevelopmentPlatform.Controllers.Api
 {
@@ -38,19 +40,6 @@ namespace AgileDevelopmentPlatform.Controllers.Api
             
         }
 
-        //POST /api/projects
-        [HttpPost]
-        public IHttpActionResult CreateProjectModel(ProjectModel newProject)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            newProject= dataManager.AddProject(newProject);
-            return Created(new Uri(Request.RequestUri+"/"+newProject.Id), newProject);
-
-        }
 
         //PUT  /api/customers.1
         [HttpPut]

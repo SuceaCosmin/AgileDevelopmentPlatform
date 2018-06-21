@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 using AgileDevelopmentPlatform.Reports.Builder;
 using AgileDevelopmentPlatform.ViewModel.Reports;
 
@@ -42,6 +43,13 @@ namespace AgileDevelopmentPlatform.Controllers
                 }
             });
 
+            allowedProjects.ForEach(model =>
+            {
+                if (model.OwnerId.Equals(userId))
+                {
+                    model.OwnerLogged = true;
+                }
+            });
             return View(allowedProjects);
         }
 
@@ -74,7 +82,7 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 var userId = HttpContext.User.Identity.GetUserId();
                 projectModel.OwnerId = userId;
-                _dataManager.AddProject(projectModel);
+                _dataManager.CreateNewProject(projectModel);
                 _dataManager.SaveChanges();
 
 
@@ -128,7 +136,11 @@ namespace AgileDevelopmentPlatform.Controllers
 
             var userId = HttpContext.User.Identity.GetUserId();
             var userAccessList = _dataManager.GetUserAccessOnProject(id);
-            if (!userAccessList.Any(access => access.UserId.Equals(userId)))
+
+            bool isOwner = userId.Equals(project.OwnerId);
+            bool hasAccess = userAccessList.Any(access => access.UserId.Equals(userId));
+            if (!isOwner
+                   && !hasAccess)
             {
                 //TODO: Update to display error that the user does not have access to the project
                 return HttpNotFound();
@@ -339,6 +351,17 @@ namespace AgileDevelopmentPlatform.Controllers
             _dataManager.SaveChanges();
 
             return RedirectToAction("ViewProject", "Projects", new { Id = sprintViewModel.ProjectId });
+        }
+
+        public ActionResult DeleteSprint(int sprintId)
+        {
+            SprintModel sprintModel = _dataManager.getSprintById(sprintId);
+            _dataManager.RemoveSprint(sprintModel.Id);
+
+            _dataManager.SaveChanges();
+
+
+            return RedirectToAction("ViewProject","Projects", new { Id = sprintModel.ProjectId });
         }
 
         public ActionResult AssignTaskToSprint(int taskId)

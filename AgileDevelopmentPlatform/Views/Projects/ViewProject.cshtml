@@ -36,7 +36,7 @@
             {
 
                 <h2>@sprintModel.Name</h2>
-
+                <button onclick="DeleteSprint(@sprintModel.Id)">Remove</button>
                 if (!sprintModel.Tasks.Any())
                 {
                     <p>No task has been assigned  to this sprint yet.</p>
@@ -207,6 +207,23 @@
                         }
 
                     });
+                }
+            });
+    }
+
+    function DeleteSprint(sprintId) {
+        bootbox.confirm("Are you sure you want to delete the selected sprint?",
+            function(result) {
+                if (result) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DeleteSprint", "Projects")',                    
+                        data: { sprintId: sprintId },                     
+                        success: function() {window.location.reload(true);},
+                        error: function() { alert('A error'); }
+                    });
+
                 }
             });
     }
