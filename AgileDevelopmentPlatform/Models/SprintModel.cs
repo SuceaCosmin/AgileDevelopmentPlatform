@@ -22,6 +22,8 @@ namespace AgileDevelopmentPlatform.Models
 
         public string Name { get; set; }
 
+        public string TargetDate { get; set; }
+
         public int PercentageOfCompletion { get; set; }
 
         public int OverallEffortEstimation { get; set; }

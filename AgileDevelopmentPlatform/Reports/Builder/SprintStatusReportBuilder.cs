@@ -71,6 +71,7 @@ namespace AgileDevelopmentPlatform.Reports.Builder
             {
                 Id = sprint.Id,
                 Name = sprint.Name,
+                TargetDate = sprint.TargetDate,
                 PercentageOfCompletion = percentageOfCompletion,
                 OverallEffortEstimation = overallEffortEstimation,
                 OverallWorkEffort = overallWorkEffort,

@@ -2,7 +2,16 @@
 @model SprintStatusReportViewModel
 
 
-<h2>Sprint status report: @Model.Name </h2>
+<row>
+    <div class="col-md-8">
+        <h2>Sprint status report: @Model.Name </h2>
+    </div>
+    <div class="col-md-4">
+        <h2>Target date: @Model.TargetDate</h2>
+    </div>
+  
+</row>
+
 @if (!Model.HideGenerate)
 {
     @Html.ActionLink("Print report", "PrintSprintStatusReport", "Projects", new { sprintId = Model.Id}, null)
