@@ -2,19 +2,15 @@
 @using AgileDevelopmentPlatform.ViewModel
 @model ProjectAccessViewModel
 
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval");
-    @Scripts.Render("~/bundles/lib");
-}
- TODO: Java script functionality for table is enable only after an the popup appears
 
-<h2>AccessManagement</h2>
+<h2>Access Management</h2>
 <h2>@Model.ProjectName user access</h2>
 <div class="row">
     <div class=" col-md-10"></div>
     <div class=" col-md-2"><button class="button btn-success hover" onclick="AddNewUser()">Add user</button></div>
 
 </div>
+<br/>
 @if (@Model.GrantedAccessList.Any())
 {
 
@@ -56,40 +52,47 @@ else
         </div>
     </div>
 </div>
+@section scripts{
+    <script>
 
-<script>
+        $(document).ready(function() {
+            var table = $("#UserAccessTable").DataTable();
 
-    function AddNewUser() {
+        });
 
-        $("#newTaskCreationBody").load('@Url.Action("AddUserToProject", "Projects", new {projectId = @Model.ProjectId})',
-            function() {
-                $("#modal").modal("show");
-            });
+        function AddNewUser() {
 
-
-    };
-    function RemoveUser(source) {
-        var table = $("#UserAccessTable").DataTable();
-        var id = source.getAttribute('data-user-id');
-        var button = $(this);
-        bootbox.confirm("Are you sure you want to remove the selected user?",
-            function(result) {
-                if (result) {
-                    $.ajax({
-
-                        url: '/api/access?userId='+id+'&projectId=+@Model.ProjectId+',
-
-                        method: 'DELETE',
-
-                        success: function (data) {
-
-                            table.row(button.parents("tr").remove()).draw();
-                            window.location.reload(true);
-
-                        }});
-                }
-            });
-    }
-</script>
+            $("#newTaskCreationBody").load(
+                '@Url.Action("AddUserToProject", "Projects", new {projectId = @Model.ProjectId})',
+                function() {
+                    $("#modal").modal("show");
+                });
 
 
+        };
+
+        function RemoveUser(source) {
+            var table = $("#UserAccessTable").DataTable();
+            var id = source.getAttribute('data-user-id');
+            var button = $(this);
+            bootbox.confirm("Are you sure you want to remove the selected user?",
+                function(result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/api/access?userId=' + id + '&projectId=+@Model.ProjectId+',
+
+                            method: 'DELETE',
+
+                            success: function(data) {
+
+                                table.row(button.parents("tr").remove()).draw();
+                                window.location.reload(true);
+
+                            }
+                        });
+                    }
+                });
+        }
+    </script>
+
+}

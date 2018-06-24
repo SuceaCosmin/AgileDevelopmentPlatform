@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Web.Mvc;
 using System.Web.Routing;
 using AgileDevelopmentPlatform.Reports.Builder;
@@ -108,7 +109,8 @@ namespace AgileDevelopmentPlatform.Controllers
 
             var userId = HttpContext.User.Identity.GetUserId();
             var userAccessList = _dataManager.GetUserAccessOnProject(id);
-            if (!userAccessList.Any(access => access.UserId.Equals(userId)))
+            bool isOwner = project.OwnerId.Equals(userId);
+            if (!isOwner && !userAccessList.Any(access => access.UserId.Equals(userId)))
             {
                 //TODO: Update to display error that the user does not have access to the project
                 return HttpNotFound();
@@ -331,23 +333,52 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult NewSprint(int projectId)
         {
-            NewSprintViewModel model = new NewSprintViewModel()
+            AddEditSprintViewModel model = new AddEditSprintViewModel()
             {
                 ProjectId = projectId
             };
             return PartialView("NewSprint", model);
         }
 
-        public ActionResult SaveSprint(NewSprintViewModel sprintViewModel)
+        public ActionResult EditSprint(int sprintId)
+        {
+            SprintModel model = _dataManager.FindSprintById(sprintId);
+
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+
+            AddEditSprintViewModel viewModel = Mapper.Map<AddEditSprintViewModel>(model);
+
+            return PartialView("NewSprint", viewModel);
+
+        }
+
+        public ActionResult SaveSprint(AddEditSprintViewModel sprintViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return PartialView("NewSprint", sprintViewModel);
             }
 
-            SprintModel sprintModel = Mapper.Map<SprintModel>(sprintViewModel);
+             SprintModel model=_dataManager.FindSprintById(sprintViewModel.Id);
 
-            _dataManager.AddSprint(sprintModel);
+            if (model == null)
+            {
+                SprintModel sprintModel = Mapper.Map<SprintModel>(sprintViewModel);
+
+                _dataManager.AddSprint(sprintModel);
+            }
+            else
+            {
+                model.Name = sprintViewModel.Name;
+                model.TargetDate = sprintViewModel.TargetDate;
+                _dataManager.UpdateSprint(model);
+            }
+
+
+
             _dataManager.SaveChanges();
 
             return RedirectToAction("ViewProject", "Projects", new { Id = sprintViewModel.ProjectId });
@@ -355,7 +386,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
         public ActionResult DeleteSprint(int sprintId)
         {
-            SprintModel sprintModel = _dataManager.getSprintById(sprintId);
+            SprintModel sprintModel = _dataManager.FindSprintById(sprintId);
             _dataManager.RemoveSprint(sprintModel.Id);
 
             _dataManager.SaveChanges();
@@ -695,6 +726,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
 
         #endregion
+
 
     }
 }

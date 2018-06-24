@@ -23,7 +23,7 @@ namespace AgileDevelopmentPlatform.ViewModel
         public int PercentageOfCompletion { get; set; }
     }
 
-    public class NewSprintViewModel
+    public class AddEditSprintViewModel
     {
         public int Id { get; set; }
 

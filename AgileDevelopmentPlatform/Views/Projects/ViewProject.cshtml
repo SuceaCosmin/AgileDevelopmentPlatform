@@ -7,22 +7,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval");
-}
+
 <div>
     <div>
-            <H2>Project @Model.Name</H2>
+        <H2>Project @Model.Name</H2>
 
-            @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
-            {
+        @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
+        {
 
-                @Html.ActionLink("Edit user acces", "EditProjectAccess", "Projects", new {id = Model.Id}, null)
+            @Html.ActionLink("Edit user acces", "EditProjectAccess", "Projects", new { id = Model.Id }, null)
 
-            }
+        }
         <button class="button btn-success hover" onclick="CreateNewSprint()">Create sprint</button>
-            @Html.ActionLink("Reports","Reports","Projects", new {projectId= Model.Id},null)
-        
+        @Html.ActionLink("Reports", "Reports", "Projects", new { projectId = Model.Id }, null)
+
     </div>
 
     <div id="sprintSection" class="form-group">
@@ -36,6 +34,7 @@
             {
 
                 <h2>@sprintModel.Name</h2>
+                <button onclick="EditSprint(@sprintModel.Id)">Edit</button>
                 <button onclick="DeleteSprint(@sprintModel.Id)">Remove</button>
                 if (!sprintModel.Tasks.Any())
                 {
@@ -53,7 +52,7 @@
                     </div>
 
                     <div>
-                        <table class="table table-bordered">
+                        <table id ="@sprintModel.Name"class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th class="col-md-9">Name</th>
@@ -128,7 +127,7 @@
                                 {
                                     <button class="btn-success" onclick="ReopenTask(@task.Id)">Reopen task</button>
                                 }
-                               
+
                                 <button class="btn-danger " onclick="DeleteTask(@task.Id)">Remove</button>
                             </td>
 
@@ -156,102 +155,120 @@
 
 </div>
 
+@section scripts{
+    <script>
 
-<script>
-    function CreateNewTask() {
-        
-        $("#newTaskCreationBody").load('@Url.Action("NewTask", "Projects", new {projectId = @Model.Id})',
-            function() {
-                $("#taskCreationModal").modal("show");
-            });
+        $(document).ready(function() {
+            var table = $("#backlogTable").DataTable();
 
-
-    };
-
-    function EditTask(taskId) {
-        $("#newTaskCreationBody").load('@Url.Action("EditTask", "Projects")?taskID=' + taskId,
-            function() {
-                $("#taskCreationModal").modal("show");
-            });
-    }
-    function ReopenTask(taskId) {
-        bootbox.confirm("Are you sure you want to reopen the selected task?",
-            function(result) {
-                if (result) {
-
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("ReopenTask", "Projects")',                    
-                        data: { id: taskId },                     
-                        success: function() {window.location.reload(true);},
-                        error: function() { alert('A error'); }
-                    });
-
-                }
-            });
-    }
-
-    function DeleteTask(taskId) {
-        var table = $("#backlogTable").DataTable();
-        var button = $(this);
-        bootbox.confirm("Are you sure you want to delete the selected task?",
-            function(result) {
-                if (result) {
-                    $.ajax({
-                        url: "/api/tasks/" + taskId,
-                        method: "DELETE",
-                        success: function() {
-                            table.row(button.parents("tr").remove()).draw();
-                            window.location.reload(true);
-
-                        }
-
-                    });
-                }
-            });
-    }
-
-    function DeleteSprint(sprintId) {
-        bootbox.confirm("Are you sure you want to delete the selected sprint?",
-            function(result) {
-                if (result) {
-
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("DeleteSprint", "Projects")',                    
-                        data: { sprintId: sprintId },                     
-                        success: function() {window.location.reload(true);},
-                        error: function() { alert('A error'); }
-                    });
-
-                }
-            });
-    }
-
-    function AssingTaskToSprint(taskId) {
-        $("#newTaskCreationBody").load('@Url.Action("AssignTaskToSprint", "Projects")?taskID=' + taskId,
-            function() {
-                $("#taskCreationModal").modal("show");
-            });
-    }
-
-
-    function CreateNewSprint() {
-        $("#newTaskCreationBody").load('@Url.Action("NewSprint", "Projects", new {projectId = @Model.Id})',
-            function() {
-                $("#taskCreationModal").modal("show");
-            });
-    };
-
-    function ProjectReport(projectId) {
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Reports", "Projects")',                    
-            data: { projectId: projectId },                     
-            error: function() { alert('A error'); }
         });
-    }
 
 
-</script>
+        function CreateNewTask() {
+
+            $("#newTaskCreationBody").load('@Url.Action("NewTask", "Projects", new {projectId = @Model.Id})',
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
+
+
+        };
+
+        function EditTask(taskId) {
+            $("#newTaskCreationBody").load('@Url.Action("EditTask", "Projects")?taskID=' + taskId,
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
+        }
+
+        function ReopenTask(taskId) {
+            bootbox.confirm("Are you sure you want to reopen the selected task?",
+                function(result) {
+                    if (result) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("ReopenTask", "Projects")',
+                            data: { id: taskId },
+                            success: function() { window.location.reload(true); },
+                            error: function() { alert('A error'); }
+                        });
+
+                    }
+                });
+        }
+
+        function DeleteTask(taskId) {
+            var table = $("#backlogTable").DataTable();
+            var button = $(this);
+            bootbox.confirm("Are you sure you want to delete the selected task?",
+                function(result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/tasks/" + taskId,
+                            method: "DELETE",
+                            success: function() {
+                                table.row(button.parents("tr").remove()).draw();
+                                window.location.reload(true);
+
+                            }
+
+                        });
+                    }
+                });
+        }
+
+        function AssingTaskToSprint(taskId) {
+            $("#newTaskCreationBody").load('@Url.Action("AssignTaskToSprint", "Projects")?taskID=' + taskId,
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
+        }
+        
+        function CreateNewSprint() {
+            $("#newTaskCreationBody").load('@Url.Action("NewSprint", "Projects", new {projectId = @Model.Id})',
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
+        };
+
+        function EditSprint(id) {
+            $("#newTaskCreationBody").load('@Url.Action("EditSprint","Projects")?sprintId=' + id,
+                function() {
+                    $("#taskCreationModal").modal("show");
+                });
+
+
+        }
+
+        function DeleteSprint(sprintId) {
+            bootbox.confirm("Are you sure you want to delete the selected sprint?",
+                function(result) {
+                    if (result) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("DeleteSprint", "Projects")',
+                            data: { sprintId: sprintId },
+                            success: function() { window.location.reload(true); },
+                            error: function() { alert('A error'); }
+                        });
+
+                    }
+                });
+        }
+
+
+        function ProjectReport(projectId) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Reports", "Projects")',
+                data: { projectId: projectId },
+                error: function() { alert('A error'); }
+            });
+        }
+
+
+    </script>
+}
 

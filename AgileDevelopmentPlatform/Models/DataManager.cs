@@ -60,7 +60,10 @@ namespace AgileDevelopmentPlatform.Models
         public void UpdateProject(ProjectModel project)
         {
             var projectInDb = _databaseEntities.Projects.Single(proj => proj.Id == project.Id);
-            Mapper.Map(project, projectInDb);
+
+            projectInDb.ProjectName = project.Name;
+
+
         }
 
         public bool RemoveProject(int id)
@@ -85,6 +88,13 @@ namespace AgileDevelopmentPlatform.Models
             _databaseEntities.Sprints.Add(sprint);
         }
 
+        public void UpdateSprint(SprintModel model)
+        {
+            var sprint=_databaseEntities.Sprints.FirstOrDefault(s => s.Id == model.Id);
+            sprint.Name = model.Name;
+            sprint.TargetDate = model.TargetDate;
+        }
+
         public SprintModel FindSprintById(int sprintId)
         {
            var model= _databaseEntities.Sprints.FirstOrDefault(sprint => sprint.Id == sprintId);
@@ -93,12 +103,6 @@ namespace AgileDevelopmentPlatform.Models
 
         }
 
-        public SprintModel getSprintById(int sprintId)
-        {
-            Sprint currentSprint= _databaseEntities.Sprints.FirstOrDefault(sprint => sprint.Id == sprintId);
-            return Mapper.Map<SprintModel>(currentSprint);
-
-        }
 
         public void RemoveSprint(int sprintId)
         {
@@ -325,6 +329,7 @@ namespace AgileDevelopmentPlatform.Models
             _databaseEntities.SaveChanges();
         }
 
-     
+
+ 
     }
 }

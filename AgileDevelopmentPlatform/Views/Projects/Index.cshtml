@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <th>Project</th>
-                <th>Delete</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +26,8 @@
                     <td>@Html.ActionLink(project.Name, "ViewProject", "Projects", new { id = project.Id }, null)</td>
                     <td>
                         @if(@project.OwnerLogged){
-                        <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button>
+                            <button class="button btn-link">@Html.ActionLink("Edit", "EditProject", "Projects", new {id= project.Id},null)</button>
+                            <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button>
                         }                
                     </td>
                 </tr>
@@ -69,6 +70,7 @@ else
 
                 });
         });
+
     </script>
 }
 
