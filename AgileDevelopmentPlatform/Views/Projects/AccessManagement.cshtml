@@ -3,11 +3,10 @@
 @model ProjectAccessViewModel
 
 
-<h2>Access Management</h2>
-<h2>@Model.ProjectName user access</h2>
+<h2>Access Management:@Model.ProjectName </h2>
 <div class="row">
     <div class=" col-md-10"></div>
-    <div class=" col-md-2"><button class="button btn-success hover" onclick="AddNewUser()">Add user</button></div>
+    <div class=" col-md-2"><button class="btn btn-success hover" onclick="AddNewUser()">Add user</button></div>
 
 </div>
 <br/>
@@ -17,8 +16,8 @@
     <table id="UserAccessTable" class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th>User</th>
-                <th>Remove</th>
+                <th class="col-md-10">User</th>
+                <th col="col-md-2">Remove</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +25,7 @@
             {
                 <tr>
                     <td>@user.UserName</td>
-                    <td> <button data-user-id="@user.Id" class="btn-danger" onclick="RemoveUser(this)">Remove</button></td>
+                    <td> <button data-user-id="@user.Id" class="btn btn-danger glyphicon glyphicon-trash" onclick="RemoveUser(this)"></button></td>
                 </tr>
             }
         </tbody>

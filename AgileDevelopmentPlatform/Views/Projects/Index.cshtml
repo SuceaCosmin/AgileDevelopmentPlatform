@@ -26,8 +26,8 @@
                     <td>@Html.ActionLink(project.Name, "ViewProject", "Projects", new { id = project.Id }, null)</td>
                     <td>
                         @if(@project.OwnerLogged){
-                            <button class="button btn-link">@Html.ActionLink("Edit", "EditProject", "Projects", new {id= project.Id},null)</button>
-                            <button data-project-id="@project.Id" class="btn-link js-delete">Delete</button>
+                            <button class="btn btn-success glyphicon glyphicon-pencil">@Html.ActionLink("Edit", "EditProject", "Projects", new {id= project.Id},null)</button>
+                            <button data-project-id="@project.Id" class="btn btn-danger glyphicon glyphicon-trash js-delete"></button>
                         }                
                     </td>
                 </tr>

@@ -5,7 +5,9 @@
 @if (!@Model.HideGenerate)
 {
     <h2>Top contribution ranking:</h2>
-    @Html.ActionLink("Print report", "PrintTopContributorsReport", "Projects", new { projectId = Model.ProjectId }, null)
+    <div style="float: right">
+        @Html.ActionLink("Print report", "PrintTopContributorsReport", "Projects", new { @class = "btn", projectId = Model.ProjectId }, null)
+    </div>
 }
 else
 {

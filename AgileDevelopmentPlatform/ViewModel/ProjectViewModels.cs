@@ -39,7 +39,9 @@ namespace AgileDevelopmentPlatform.ViewModel
     public class ProjectUserAccessViewModel
     {
         public int Id { get; set; }
+
         [Required]
+        [Display(Name = "User")]
         public string UserId { get; set; }
 
         public int ProjectId { get; set; }
