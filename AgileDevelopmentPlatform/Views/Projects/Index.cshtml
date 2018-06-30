@@ -6,9 +6,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Project List</h2>
+<br>
+<div class="row">
+    <div class="col-md-10">
+        <h2>Project List</h2>
+     
+    </div>
+    <div class="col-md-2">
+        <br>
+        @Html.ActionLink("Create new project", "NewProject", "Projects", null, new {@class = "btn btn-success"})
+    </div>
+</div>
 
-<button class="button btn-link">@Html.ActionLink("Create new project", "NewProject", "Projects")</button>
+
+<br>
 
 @if (@Model.Count > 0)
 {
@@ -23,10 +34,10 @@
             @foreach (ProjectModel project in Model)
             {
                 <tr>
-                    <td>@Html.ActionLink(project.Name, "ViewProject", "Projects", new { id = project.Id }, null)</td>
-                    <td>
+                    <td class="col-md-10">@Html.ActionLink(project.Name, "ViewProject", "Projects", new { id = project.Id }, null)</td>
+                    <td  class="col-md-2">
                         @if(@project.OwnerLogged){
-                            <button class="btn btn-success glyphicon glyphicon-pencil">@Html.ActionLink("Edit", "EditProject", "Projects", new {id= project.Id},null)</button>
+                            @Html.ActionLink(" ","EditProject", "Projects", new {id= project.Id}, new { @class= "btn btn-success glyphicon glyphicon-pencil" })
                             <button data-project-id="@project.Id" class="btn btn-danger glyphicon glyphicon-trash js-delete"></button>
                         }                
                     </td>

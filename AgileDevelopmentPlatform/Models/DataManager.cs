@@ -160,10 +160,6 @@ namespace AgileDevelopmentPlatform.Models
                     taskModel.ProjectId = taskInDb.ProjectId;
                 }
                
-                if (taskModel.SprintId == null || taskModel.SprintId == 0)
-                {
-                    taskModel.SprintId = taskInDb.SprintId;
-                }
 
                 Mapper.Map(taskModel, taskInDb);
             }

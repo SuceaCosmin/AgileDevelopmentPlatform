@@ -14,7 +14,10 @@
 
 @if (!Model.HideGenerate)
 {
-    @Html.ActionLink("Print report", "PrintSprintStatusReport", "Projects", new { sprintId = Model.Id}, null)
+    <div style="float: right">
+        @Html.ActionLink(" ", "PrintSprintStatusReport", "Projects", new { sprintId = Model.Id}, new {@class= "btn  glyphicon glyphicon-download-alt"})
+    </div>
+ 
 }
 
 <div>

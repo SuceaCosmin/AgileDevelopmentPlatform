@@ -1,13 +1,17 @@
 ﻿@using AgileDevelopmentPlatform.ViewModel.Reports
-@model AgileDevelopmentPlatform.ViewModel.Reports.TopContributorsReportViewModel
+@model TopContributorsReportViewModel
 
 
 @if (!@Model.HideGenerate)
 {
-    <h2>Top contribution ranking:</h2>
-    <div style="float: right">
-        @Html.ActionLink("Print report", "PrintTopContributorsReport", "Projects", new { @class = "btn", projectId = Model.ProjectId }, null)
-    </div>
+    <row>
+        <div><h2>Top contribution ranking:</h2></div>
+        <div style="float: right">
+            @Html.ActionLink(" ", "PrintTopContributorsReport", "Projects"
+                , new {@class = "btn", projectId = Model.ProjectId}, new {@class = "btn  glyphicon glyphicon-download-alt"})
+        </div>
+    </row>
+
 }
 else
 {

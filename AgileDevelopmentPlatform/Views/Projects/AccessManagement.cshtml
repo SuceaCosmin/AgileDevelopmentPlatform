@@ -3,10 +3,13 @@
 @model ProjectAccessViewModel
 
 
-<h2>Access Management:@Model.ProjectName </h2>
+<h2>Access Management </h2>
 <div class="row">
-    <div class=" col-md-10"></div>
-    <div class=" col-md-2"><button class="btn btn-success hover" onclick="AddNewUser()">Add user</button></div>
+    <div class=" col-md-10"><h2>@Model.ProjectName </h2></div>
+    <div class=" col-md-2">
+        <br/>
+        <button class="btn btn-success hover" onclick="AddNewUser()">Add user</button>
+    </div>
 
 </div>
 <br/>
@@ -55,7 +58,7 @@ else
     <script>
 
         $(document).ready(function() {
-            var table = $("#UserAccessTable").DataTable();
+            $("#UserAccessTable").DataTable();
 
         });
 
@@ -82,7 +85,7 @@ else
 
                             method: 'DELETE',
 
-                            success: function(data) {
+                            success: function() {
 
                                 table.row(button.parents("tr").remove()).draw();
                                 window.location.reload(true);

@@ -83,10 +83,14 @@ namespace AgileDevelopmentPlatform.Controllers
             {
                 var userId = HttpContext.User.Identity.GetUserId();
                 projectModel.OwnerId = userId;
-                _dataManager.CreateNewProject(projectModel);
+              var proj= _dataManager.CreateNewProject(projectModel);
+                _dataManager.AddUserAccessToProject(
+                    new UserAccessModel()
+                      {
+                        ProjectId = proj.Id,
+                        UserId = userId
+                    });
                 _dataManager.SaveChanges();
-
-
             }
             else
             {
@@ -256,7 +260,8 @@ namespace AgileDevelopmentPlatform.Controllers
            userAccessList.ForEach(userAccess =>
            {
                var user = userList.Find(model => model.Id.Equals(userAccess.UserId));
-               if (user != null)
+               if (user != null 
+                   && !user.Id.Equals(project.OwnerId))
                {
                    usersWithAccess.Add(Mapper.Map<UserSelectViewModel>(user));
                }
@@ -621,6 +626,21 @@ namespace AgileDevelopmentPlatform.Controllers
         
            
         }
+
+        public ActionResult DiscardTask(int taskId)
+        {
+            TaskModel task = _dataManager.FindTaskById(taskId);
+            if (task == null)
+            {
+                return HttpNotFound();
+            }
+
+            task.SprintId = null;
+            _dataManager.UpdateTask(task);
+            _dataManager.SaveChanges();
+
+            return  RedirectToAction("ViewProject","Projects", new { Id = task.ProjectId });
+        }
         #endregion
 
         #region Report
@@ -726,6 +746,7 @@ namespace AgileDevelopmentPlatform.Controllers
 
 
         #endregion
+
 
 
     }

@@ -1,4 +1,5 @@
 ﻿@using AgileDevelopmentPlatform.ViewModel
+@using Antlr.Runtime.Tree
 @using Microsoft.AspNet.Identity
 @model ProjectViewModel
 
@@ -15,122 +16,147 @@
         @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
         {
 
-            @Html.ActionLink("Edit user acces", "EditProjectAccess", "Projects", new { id = Model.Id, @class = "btn" }, null)
+            @Html.ActionLink("Edit user acces", "EditProjectAccess", "Projects", new { id = Model.Id}, new {@class= "btn btn-success"} )
 
 
         }
         
-        @Html.ActionLink("Reports", "Reports", "Projects", new { projectId = Model.Id }, null)
+        @Html.ActionLink(" Reports", "Reports", "Projects", new { projectId = Model.Id }, new{@class= "btn btn-success" })
 
     </div>
 
     <div id="sprintSection" class="form-group">
-        <div class="row" >
-            <div class="col-md-10">
-                <H1>Sprints</H1>
-            </div>
-            <div class="col-md-2">
-                <button class="btn  btn-success hover" onclick="CreateNewSprint()">Add new sprint</button>
-            </div>
-        </div>
-       
-       
-        @if (!Model.SprintList.Any())
-    {
-        <p>No sprints have been created yet.</p>
-}
-else
-{
-    <div id="colapsableSection" class="panel-group">
+        @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
+        {
 
-
-        @foreach (SprintViewModel sprintModel in Model.SprintList)
-    {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <H4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#colapsableSection" href=@String.Format("#collapse_{0}", sprintModel.Name)>
-
-                        @if (sprintModel.Tasks.Count > 0)
-                    {
-                        <div class="row">
-                            <div class=" col-md-2"><H5>@sprintModel.Name</H5></div>
-                            <div class=" col-md-2"><h5>Open tasks: @sprintModel.OpenTasks</h5></div>
-                            <div class=" col-md-2"><h5>Working tasks: @sprintModel.WorkingTasks</h5></div>
-                            <div class=" col-md-2"><h5>Finished tasks: @sprintModel.FinishedTasks</h5></div>
-                            <div class=" col-md-4"><h5>Percentage of completion: @sprintModel.PercentageOfCompletion %</h5></div>
-                            
-
-                        </div>
-                }
-                else
-                {
-                    @sprintModel.Name
-            }
-                    </a>
-                </H4>
-            </div>
-            <div id=@String.Format("collapse_{0}", sprintModel.Name) class="panel-collapse collapse @(Model.SprintList.ToList().IndexOf(sprintModel) == 0 ? "in" : "")">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class=" col-md-10">
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-success glyphicon glyphicon-pencil" onclick="EditSprint(@sprintModel.Id)"></button>
-                            <button class="btn btn-danger glyphicon glyphicon-trash" onclick="DeleteSprint(@sprintModel.Id)"></button>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <H1>Sprints</H1>
+                </div>
+                <div class="col-md-2">
                     <br/>
-                        @if (!sprintModel.Tasks.Any())
-                        {
-                            <p>No task has been assigned to this sprint yet.</p>
-                        }
-                        else
-                        {
-
-
-                            <div>
-                                <table name="table_@sprintModel.Name" class="table table-bordered">
-                                    <colgroup>
-                                        <col class="col-md-10"/>
-                                        <col class="col-md-2">
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Edit</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach (ReferenceTaskViewModel task in sprintModel.Tasks)
-                                    {
-                                        <tr>
-                                            <td>@task.Name</td>
-                                            <td>
-                                                @if (!@task.IsCompleted)
-                                                {
-                                                    <button class="btn btn-success" onclick="EditTask(@task.Id)"><span class="glyphicon glyphicon-pencil"></span></button>
-                                                }
-                                                else
-                                                {
-                                                    <button class="btn btn-success" onclick="ReopenTask(@task.Id)"><span class=" glyphicon glyphicon-retweet"></span></button>
-                                                }
-
-                                                <button class="btn btn-danger " onclick="DeleteTask(@task.Id)"><span class="glyphicon glyphicon-trash"></span></button>
-                                            </td>
-
-                                        </tr>
-                                    }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                    </div>
+                    <button class="btn  btn-success hover" onclick="CreateNewSprint()">Add new sprint</button>
+                </div>
             </div>
-        </div>
-}
-    </div>
-}
+
+
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <H1>Sprints</H1>
+                </div>
+            </div>
+        }
+
+
+
+        @if (!Model.SprintList.Any())
+        {
+            <p>No sprints have been created yet.</p>
+        }
+        else
+        {
+            <div id="colapsableSection" class="panel-group">
+
+
+                @foreach (SprintViewModel sprintModel in Model.SprintList)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <H4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#colapsableSection" href=@String.Format("#collapse_{0}", sprintModel.Name)>
+
+                                    @if (sprintModel.Tasks.Count > 0)
+                                    {
+                                        <div class="row">
+                                            <div class=" col-md-2"><H5>@sprintModel.Name</H5></div>
+                                            <div class=" col-md-2"><h5>Open tasks: @sprintModel.OpenTasks</h5></div>
+                                            <div class=" col-md-2"><h5>Working tasks: @sprintModel.WorkingTasks</h5></div>
+                                            <div class=" col-md-2"><h5>Finished tasks: @sprintModel.FinishedTasks</h5></div>
+                                            <div class=" col-md-4"><h5>Percentage of completion: @sprintModel.PercentageOfCompletion %</h5></div>
+
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @sprintModel.Name
+                                    }
+                                </a>
+                            </H4>
+                        </div>
+                        <div id=@String.Format("collapse_{0}", sprintModel.Name) class="panel-collapse collapse @(Model.SprintList.ToList().IndexOf(sprintModel) == 0 ? "in" : "")">
+                            <div class="panel-body">
+                                @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
+                                {
+                                    <div class="row">
+                                        <div class=" col-md-10">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button class="btn btn-success glyphicon glyphicon-pencil" onclick="EditSprint(@sprintModel.Id)"></button>
+                                            <button class="btn btn-danger glyphicon glyphicon-trash" onclick="DeleteSprint(@sprintModel.Id)"></button>
+                                        </div>
+                                    </div>
+                                }
+
+                                <br/>
+                                @if (!sprintModel.Tasks.Any())
+                                {
+                                    <p>No task has been assigned to this sprint yet.</p>
+                                }
+                                else
+                                {
+
+
+                                    <div>
+                                        <table name="table_@sprintModel.Name" class="table table-bordered">
+                                            <colgroup>
+                                                <col class="col-md-10"/>
+                                                <col class="col-md-2">
+                                            </colgroup>
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Edit</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach (ReferenceTaskViewModel task in sprintModel.Tasks)
+                                            {
+                                                <tr>
+                                                    <td>@task.Name</td>
+                                                    <td>
+                                                        @if (!@task.IsCompleted)
+                                                        {
+                                                            <button class="btn btn-success" onclick="EditTask(@task.Id)"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-success" onclick="ReopenTask(@task.Id)"><span class=" glyphicon glyphicon-retweet"></span></button>
+                                                        }
+                                                        
+                                                        @if (@Model.OwnerId.Equals(@User.Identity.GetUserId()))
+                                                        {
+                                                            <button class="btn btn-danger " onclick="DiscardTask(@task.Id)"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                                                            <button class="btn btn-danger " onclick="DeleteTask(@task.Id)"><span class="glyphicon glyphicon-trash"></span></button>
+                                                        }
+                                                     
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
     </div>
     <div class="form-group" id="backlogSection">
         <div class="row">
@@ -138,7 +164,8 @@ else
                 <h1>Backlog</h1>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-success hover" style="vertical-align:baseline" onclick="CreateNewTask()">Add new task</button>
+                <br/>
+                <button class="btn btn-success hover" style="vertical-align: baseline" onclick="CreateNewTask()">Add new task</button>
             </div>
         </div>
         @if (!Model.TaskList.Any())
@@ -205,11 +232,11 @@ else
 
         $(document).ready(function() {
             var table = $("#backlogTable").DataTable();
-                var tables = document.querySelector('[name^=table_]');
+            var tables = document.querySelector('[name^=table_]');
 
-                for (var i = 0; i < tables.length; i++) {
-                    tables[i].DataTable();
-                }
+            for (var i = 0; i < tables.length; i++) {
+                tables[i].DataTable();
+            }
         });
 
 
@@ -240,15 +267,29 @@ else
                             url: '@Url.Action("ReopenTask", "Projects")',
                             data: { id: taskId },
                             success: function() { window.location.reload(true); },
-                            error: function() { alert('A error'); }
+                            error: function () { alert("Error occured") }
                         });
 
                     }
                 });
         }
 
+        function DiscardTask(id) {
+            var button = $(this);
+            bootbox.confirm("Are you sure you want to discard the selected task?",
+                function(result) {
+                    if (result) {
+                        $.ajax({
+                            url: '@Url.Action("DiscardTask", "Projects")',
+                            data: { taskId: id },
+                            success: function() { window.location.reload(true); },
+                            error: function() { alert("Error occured") }
+                        });
+                    }
+                });
+        }
+
         function DeleteTask(taskId) {
-            var table = $("#backlogTable").DataTable();
             var button = $(this);
             bootbox.confirm("Are you sure you want to delete the selected task?",
                 function(result) {
